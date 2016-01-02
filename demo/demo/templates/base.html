@@ -1,0 +1,66 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="cache-control" content="public"/>
+  <meta name="robots" content="follow, all"/>
+  <meta name="language" content="{{ LANGUAGE_CODE }}"/>
+
+  <title>{% block title %}Audit{% endblock title %}</title>
+
+  {% block css %}
+  {% endblock css %}
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    {% block left-nav %}
+      <div class="left-nav col-xs-2">
+        <div class="logo">
+          <a href="{% url home %}">Audit</a>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="{% url home %}">Home</a></li>
+            <li class="nav_title">Access</li>
+            <li>
+              <ul>
+                <li><a href="{% url new_access_class %}">New (CBV)</a></li>
+                <li><a href="{% url new_access_function %}">New (FBV)</a></li>
+                <li><a href="{% url new_access_decorator %}">New (Decorated)</a></li>
+                <li><a href="{% url new_access_exception %}">New (Exception)</a></li>
+                <li><a href="{% url new_access_args 1 %}">New (With Args)</a></li>
+                <li><a href="{% url last_access %}">Last</a></li>
+              </ul>
+            </li>
+            <li class="nav_title">ModelAction</li>
+            <li>
+              <ul>
+                <li><a href="{% url create_modelaction %}">Create</a></li>
+                <li><a href="{% url update_modelaction %}">Update</a></li>
+                <li><a href="{% url delete_modelaction %}">Delete</a></li>
+                <li><a href="{% url last_modelaction %}">Last</a></li>
+              </ul>
+            </li>
+            <li class="nav_title">Audit Views</li>
+            <li>
+              <ul>
+                <li><a href="{% url model_action_search %}">ModelAction Search</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    {% endblock left-nav %}
+    <div class="main_content col-xs-10">
+      {% block content %}{% endblock content %}
+    </div>
+  </div>
+</div>
+{% block js %}
+{% endblock js %}
+</body>
+</html>

@@ -1,0 +1,94 @@
+<%
+function twoDigits(n) {
+  return (n > 9 ? n : '0' + n);
+};
+
+var datas = $.extend({}, data.old, data.new);
+for (key in datas) {
+  var old_data = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+  var new_data = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+  var old_empty = false;
+  var new_empty = false;
+  if ((key in data.old) && (data.old[key])) {
+    old_data = data.old[key];
+
+    if ((old_data instanceof Object) && ('$date' in old_data)) {
+      var ot = new Date(old_data.$date);
+      old_data = twoDigits(ot.getDate()) + "/" + twoDigits(ot.getMonth() + 1) + "/" + ot.getFullYear() + " - " + twoDigits(ot.getHours()) + ":" + twoDigits(ot.getMinutes()) + ":" + twoDigits(ot.getSeconds());
+    } else if ((old_data[0] == '<') && (old_data[old_data.length - 1] == '>')) {
+      old_data = old_data.slice(1, old_data.length - 1);
+    }
+  } else {
+    old_empty = true;
+  }
+  if ((key in data.new) && (data.new[key])) {
+    new_data = data.new[key];
+
+    if ((new_data instanceof Object) && ('$date' in new_data)) {
+      var nt = new Date(new_data.$date);
+      new_data = twoDigits(nt.getDate()) + "/" + twoDigits(nt.getMonth() + 1) + "/" + nt.getFullYear() + " - " + twoDigits(nt.getHours()) + ":" + twoDigits(nt.getMinutes()) + ":" + twoDigits(nt.getSeconds());
+    } else if ((new_data[0] == '<') && (new_data[new_data.length - 1] == '>')) {
+      new_data = new_data.slice(1, new_data.length - 1);
+    }
+  } else {
+    new_empty = true;
+  }
+  datas[key] = {
+    'old': old_data,
+    'old_empty': old_empty,
+    'new': new_data,
+    'new_empty': new_empty
+  };
+};
+%>
+<div class="checkbox">
+  <% var checkbox_id = 'changes_check_' + index; %>
+  <label for="<%- checkbox_id %>">
+  <input id="<%- checkbox_id %>" type="checkbox" name="changes_check" data-changes-check/> Show only changes
+  </label>
+</div>
+
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th width="20%">Attribute</th>
+    <th width="35%">Old Value</th>
+    <th></th>
+    <th width="35%">New Value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <%
+  for (key in datas) {
+    var old_empty = datas[key].old_empty;
+    var new_empty = datas[key].new_empty;
+    var old_data = datas[key].old;
+    var new_data = datas[key].new;
+    var arrow = "";
+    var tr_class = "";
+    var tr = "";
+    if (old_data != new_data) {
+      if (new_empty) {
+        arrow += '<span class="glyphicon glyphicon-arrow-right text-danger"></span>';
+        tr_class += 'danger';
+      } else if (old_empty) {
+        arrow += '<span class="glyphicon glyphicon-arrow-right text-success"></span>';
+        tr_class += 'success';
+      } else {
+        arrow += '<span class="glyphicon glyphicon-arrow-right text-warning"></span>';
+        tr_class += 'warning';
+      }
+      tr = 'class=' + tr_class;
+    } else {
+      tr = 'data-hideable';
+    }
+  %>
+  <tr <%- tr %>>
+    <td width="20%"><%= key %></td>
+    <td width="35%"><%= old_data %></td>
+    <td class="text-center"><%= arrow %></td>
+    <td width="35%"><%= new_data %></td>
+  </tr>
+  <% };%>
+  </tbody>
+</table>

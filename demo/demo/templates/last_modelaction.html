@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if modelaction %}
+        <h1>ModelAction</h1>
+        <div class="model_data" id="modelaction_data">
+            <ul>
+                <li>
+                    <span class="first_level_title">model: </span>
+                    <ul>
+                        {% for k, v in modelaction.model.items %}
+                            <li>
+                                <span class="second_level_title">{{ k }}: </span>
+                                <span class="second_level_text">{{ v }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>
+                    <span class="first_level_title">action: </span>
+                    <span class="first_level_text">{{ modelaction.action }}</span>
+                </li>
+                <li>
+                    <span class="first_level_title">content: </span>
+                    <ul>
+                        <li>
+                            <span class="second_level_title">old: </span>
+                            <ul>
+                                {% for k, v in modelaction.content.old.items %}
+                                    <li>
+                                        <span class="third_level_title">{{ k }}: </span>
+                                        <span class="third_level_text">{{ v }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="second_level_title">new: </span>
+                            <ul>
+                                {% for k, v in modelaction.content.new.items %}
+                                    <li>
+                                        <span class="third_level_title">{{ k }}: </span>
+                                        <span class="third_level_text">{{ v }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="second_level_title">changes: </span>
+                            <ul>
+                                {% for k, v in modelaction.content.changes.items %}
+                                    <li>
+                                        <span class="third_level_title">{{ k }}: </span>
+                                        <ul>
+                                            {% for k2, v2 in v.items %}
+                                                <li>
+                                                    <span class="fourth_level_title">{{ k2 }}: </span>
+                                                    <span class="fourth_level_text">{{ v2 }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="first_level_title">instance: </span>
+                    <ul>
+                        {% for k, v in modelaction.model.instance %}
+                            <li>
+                                <span class="second_level_title">{{ k }}: </span>
+                                <span class="second_level_text">{{ v }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>
+                    <span class="first_level_title">timestamp: </span>
+                    <span class="first_level_text">{{ modelaction.timestamp }}</span>
+                </li>
+            </ul>
+        </div>
+
+        <h1>Access</h1>
+        <div class="model_data" id="access_data">
+            <ul>
+                <li>
+                    <span class="first_level_title">request_hash: </span>
+                    <span class="first_level_text">{{ modelaction.access.request_hash }}</span>
+                </li>
+                <li>
+                    <span class="first_level_title">request: </span>
+                    <ul>
+                        <li>
+                            <span class="second_level_title">path: </span>
+                            <span class="second_level_text">{{ modelaction.access.request.path }}</span>
+                        </li>
+                        <li>
+                            <span class="second_level_title">COOKIES: </span>
+                            <ul>
+                                {% for k, v in modelaction.access.request.cookies.items %}
+                                    <li>
+                                        <span class="third_level_title">{{ k }}: </span>
+                                        <span class="third_level_text">{{ v }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="second_level_title">GET: </span>
+                            <ul>
+                                {% for k, v in modelaction.access.request.GET.items %}
+                                    <li>
+                                        <span class="third_level_title">{{ k }}: </span>
+                                        <span class="third_level_text">{{ v }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="second_level_title">POST: </span>
+                            <ul>
+                                {% for k, v in modelaction.access.request.POST.items %}
+                                    <li>
+                                        <span class="third_level_title">{{ k }}: </span>
+                                        <span class="third_level_text">{{ v }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="second_level_title">METADATA: </span>
+                            <ul>
+                                {% for k, v in modelaction.access.request.METADATA.items %}
+                                    <li>
+                                        <span class="third_level_title">{{ k }}: </span>
+                                        <span class="third_level_text">{{ v }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                {% if modelaction.access.is_response %}
+                    <li>
+                        <span class="first_level_title">response: </span>
+                        <ul>
+                            {% for k, v in modelaction.access.response.items %}
+                                <li>
+                                    <span class="second_level_title">{{ k }}: </span>
+                                    <span class="second_level_text">{{ v }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% elif modelaction.access.is_exception %}
+                    <li>
+                        <span class="first_level_title">exception: </span>
+                        <ul>
+                            {% for k, v in modelaction.access.exception.items %}
+                                <li>
+                                    <span class="second_level_title">{{ k }}: </span>
+                                    <span class="second_level_text">{{ v }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+                <li>
+                    <span class="first_level_title">time: </span>
+                    <ul>
+                        {% for k, v in modelaction.access.time.items %}
+                            <li>
+                                <span class="second_level_title">{{ k }}: </span>
+                                <span class="second_level_text">{{ v }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>
+                    <span class="first_level_title">view: </span>
+                    <ul>
+                        {% for k, v in modelaction.access.view.items %}
+                            <li>
+                                <span class="second_level_title">{{ k }}: </span>
+                                <span class="second_level_text">{{ v }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>
+                    <span class="first_level_title">user: </span>
+                    <ul>
+                        <li>
+                            <span class="second_level_title">id: </span>
+                            <span class="second_level_text">{{ modelaction.access.user.id }}</span>
+                        </li>
+                        <li>
+                            <span class="second_level_title">username: </span>
+                            <span class="second_level_text">{{ modelaction.access.user.username }}</span>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="first_level_title">custom: </span>
+                    {% for name, c in modelaction.access.custom.items %}
+                        <ul>
+                            <li>
+                                <span class="second_level_title">{{ name }}</span>
+                                <ul>
+                                    {% for k, v in c.items %}
+                                        <li>
+                                            <span class="third_level_title">{{ k }}: </span>
+                                            <span class="third_level_text">{{ v }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+                    {% endfor %}
+                </li>
+            </ul>
+        </div>
+
+        <h1>Process</h1>
+        <div class="model_data" id="process_data">
+            <ul>
+                <li>
+                    <span class="first_level_title">name: </span>
+                    <span class="first_level_text">{{ modelaction.process.name }}</span>
+                </li>
+                <li>
+                    <span class="first_level_title">args: </span>
+                    <span class="first_level_text">{{ modelaction.process.args }}</span>
+                </li>
+                <li>
+                    <span class="first_level_title">machine: </span>
+                    <span class="first_level_text">{{ modelaction.process.machine }}</span>
+                </li>
+                <li>
+                    <span class="first_level_title">pid: </span>
+                    <span class="first_level_text">{{ modelaction.process.pid }}</span>
+                </li>
+                <li>
+                    <span class="first_level_title">creation_time: </span>
+                    <span class="first_level_text">{{ modelaction.process.creation_time }}</span>
+                </li>
+                <li>
+                    <span class="first_level_title">user: </span>
+                    <span class="first_level_text">{{ modelaction.process.user }}</span>
+                </li>
+            </ul>
+        </div>
+    {% else %}
+        There is no access to show.
+    {% endif %}
+{% endblock content %}

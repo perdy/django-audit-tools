@@ -1,0 +1,13 @@
+include LICENSE
+include CHANGELOG
+include README.rst
+exclude demo/EbAudit.db
+recursive-exclude audit.egg-info *
+recursive-exclude dist *
+recursive-include demo *
+recursive-include docs *
+recursive-include docs/build *
+recursive-include audit/templates *
+recursive-include audit/static *
+prune docs/build
+prune demo/audit
