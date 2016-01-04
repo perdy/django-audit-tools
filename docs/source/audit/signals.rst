@@ -2,5 +2,5 @@
 Signals
 =======
 
-.. automodule:: audit.signals
+.. automodule:: ebury_audit.signals
     :members:

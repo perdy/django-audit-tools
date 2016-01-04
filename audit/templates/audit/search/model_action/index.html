@@ -1,0 +1,65 @@
+{% extends "audit/base.html" %}
+
+{% load static i18n %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "audit/css/model_action_search.css" %}">
+{% endblock css %}
+
+{% block content %}
+  <div class="row search-box">
+    <div class="col-xs-12">
+      <form id="search" role="form" method="get" class="form-horizontal" action="{% url modelaction-list %}" data-type="json">
+        {% csrf_token %}
+        <div id="search_form"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="result" class="row"></div>
+  {{ block.super }}
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/template" id="template_search_form">
+    {% include "audit/search/common/search_form.html" %}
+  </script>
+
+  <script type="text/template" id="template_model_action_list">
+    {% include "audit/search/model_action/model_action_list.html" %}
+  </script>
+  <script type="text/template" id="template_model_action">
+    {% include "audit/search/model_action/model_action.html" %}
+  </script>
+  <script type="text/template" id="template_tab_process">
+    {% include "audit/search/common/tab_process.html" %}
+  </script>
+  <script type="text/template" id="template_tab_access">
+    {% include "audit/search/common/tab_access.html" %}
+  </script>
+  <script type="text/template" id="template_tab_changes">
+    {% include "audit/search/common/tab_changes.html" %}
+  </script>
+  <script type="text/template" id="template_tab_detail">
+    {% include "audit/search/common/tab_detail.html" %}
+  </script>
+  <script type="text/template" id="template_filter_method">
+    {% include "audit/search/common/filter_method.html" %}
+  </script>
+  <script type="text/template" id="template_filter_model">
+    {% include "audit/search/common/filter_model.html" %}
+  </script>
+  <script type="text/template" id="template_filter_url">
+    {% include "audit/search/common/filter_url.html" %}
+  </script>
+  <script type="text/template" id="template_filter_user">
+    {% include "audit/search/common/filter_user.html" %}
+  </script>
+  <script type="text/template" id="template_filter_interlink">
+    {% include "audit/search/common/filter_interlink.html" %}
+  </script>
+  <script language="javascript" type="text/javascript" src="{% static 'audit/js/search.js' %}"></script>
+  <script language="javascript" type="text/javascript" src="{% static 'audit/js/model_action_search.js' %}"></script>
+{% endblock js %}

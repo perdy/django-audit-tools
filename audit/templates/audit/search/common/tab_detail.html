@@ -1,0 +1,83 @@
+<%
+function twoDigits (n) {
+  return (n > 9 ? n : '0' + n);
+};
+
+var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+%>
+<table class="table table-hover">
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th>Model</th>
+  </tr>
+  <tr>
+    <th width="15%">Application</th>
+    <td><%= data.model.app %></td>
+  </tr>
+  <tr>
+    <th width="15%">Name</th>
+    <td><%= data.model.name %></td>
+  </tr>
+  </tbody>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <th width="15%">Type</th>
+    <td><%= data.action %></td>
+  </tr>
+  </tbody>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th>Instance</th>
+  </tr>
+  <tr>
+    <th width="15%">ID</th>
+    <td><%= data.instance.id %></td>
+  </tr>
+  <tr>
+    <th width="15%">Description</th>
+    <td><%= data.instance.description %></td>
+  </tr>
+  </tbody>
+  <tbody>
+  <% var timestamp = new Date(data.timestamp); %>
+  <tr class="active">
+    <th width="15%"></th>
+    <th>Timestamp</th>
+  </tr>
+  <tr>
+    <th width="15%">Year</th>
+    <td><%= timestamp.getFullYear() %></td>
+  </tr>
+  <tr>
+    <th width="15%">Month</th>
+    <td><%= monthNames[timestamp.getMonth()] %></td>
+  </tr>
+  <tr>
+    <th width="15%">Day</th>
+    <td><%= dayNames[timestamp.getDay()] %></td>
+  </tr>
+  <tr>
+    <th width="15%">Time</th>
+    <td><%- twoDigits(timestamp.getHours()) %>:<%- twoDigits(timestamp.getMinutes()) %>:<%- twoDigits(timestamp.getSeconds()) %></td>
+  </tr>
+  <tr>
+    <th width="15%">Timezone</th>
+    <%
+    var timezone = -(timestamp.getTimezoneOffset() / 60);
+    if (timezone >= 0) {
+      strTimezone = "GMT+" + timezone;
+    } else {
+      strTimezone = "GMT" + timezone;
+    }
+    %>
+    <td><%= strTimezone %></td>
+  </tr>
+  </tbody>
+</table>

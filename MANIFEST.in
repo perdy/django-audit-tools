@@ -1,7 +1,9 @@
 include LICENSE
 include CHANGELOG
 include README.rst
-exclude demo/EbAudit.db
+include CONTRIBUTORS.rst
+include requirements.txt
+exclude demo/Audit.db
 recursive-exclude audit.egg-info *
 recursive-exclude dist *
 recursive-include demo *

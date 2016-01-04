@@ -1,0 +1,16 @@
+<div id="<%- name %>" class="form-group">
+  <div class="col-xs-1">
+    <button type="button" class="btn btn-danger remove-filter-button" data-filter="<%- name %>"><span class="glyphicon glyphicon-minus"></span></button>
+  </div>
+  <label class="col-xs-1 control-label filter-label" for="filter_name">Filter</label>
+  <div class="col-xs-2">
+    <input class="form-control" type="text" id="filter_name" value="Method" readonly/>
+  </div>
+  <label class="col-xs-1 control-label" for="input_method_app">Method</label>
+  <div class="col-xs-2">
+    <input class="form-control" id="input_method_app" type="text" name="method_app" placeholder="App" autocomplete/>
+  </div>
+  <div class="col-xs-2">
+    <input class="form-control" id="input_method_name" type="text" name="method_name" placeholder="Name" autocomplete/>
+  </div>
+</div>

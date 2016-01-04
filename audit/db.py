@@ -1,3 +1,7 @@
+# -*- encoding: utf-8 -*-
+"""
+Module to define and create connections with MongoDB.
+"""
 from __future__ import unicode_literals
 import logging
 
@@ -15,7 +19,7 @@ def mongodb_connect(connection, alias):
     name = connection.get('NAME', 'audit')
     replica_set = connection.get('REPLICA_SET', '')
 
-    if (isinstance(host, tuple) or isinstance(host, list)) and (isinstance(port, tuple) or isinstance(port, list)) and len(host) == len(port):
+    if isinstance(host, (list, tuple)) and isinstance(port, (list, tuple)) and len(host) == len(port):
         hosts_list = ["{}:{}".format(h, p) for h, p in zip(host, port)]
         hosts_str = ",".join(hosts_list)
         options = "?replicaSet={}".format(replica_set)
@@ -31,5 +35,5 @@ def mongodb_connect(connection, alias):
     try:
         mongoengine.connect(name, host=uri, alias=alias)
     except mongoengine.ConnectionError as e:
-        logger.error('Database connection error: %s', e.message)
+        logger.error('Database connection error: %s', e.message, exc_info=e)
         raise e

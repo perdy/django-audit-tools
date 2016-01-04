@@ -6,10 +6,13 @@ from mongoengine import Document, StringField, IntField, DateTimeField
 
 from audit import settings
 
+__all__ = ['Process']
+
 
 @python_2_unicode_compatible
 class Process(Document):
     """Represents a process that launch a django management command.
+    Contains the following structure:
 
     :cvar name: Process name.
     :cvar args: Process args.
@@ -36,7 +39,6 @@ class Process(Document):
         'app_label': 'audit',
         'db_alias': settings.DB_ALIAS,
     }
-    meta['indexes'].extend(settings.PROCESS_INDEXES)
 
     def items(self):
         """List items in form (key, value).
@@ -45,7 +47,17 @@ class Process(Document):
         """
         return self.to_mongo().items()
 
+    def verbose_str(self):
+        """Verbose string representation.
+
+        :return: Verbose string representation.
+        :rtype: str
+        """
+        return "Process {} with pid {:d} run by {} on {} ({})".format(self.name, self.pid, self.user, self.machine,
+                                                                      self.creation_time)
+
     def __str__(self):
-        return "{} user:{} machine:{} creation_time:{}".format(self.name, self.user, self.machine, self.creation_time)
+        return "Process{{{}, pid:{:d}, user:{}, machine:{}, creation_time:{}}}".format(
+                self.name, self.pid, self.user, self.machine, self.creation_time)
 
 

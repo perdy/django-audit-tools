@@ -5,65 +5,30 @@ from django.core.exceptions import ImproperlyConfigured
 
 from django.http import HttpResponse
 
-
-class MultipleObjectJSONMixin(object):
-    page_context_name = 'page'
-    num_pages_context_name = 'last'
-    paginated_by = 10
-
-    def get_page_context_name(self):
-        return self.page_context_name
-
-    def get_num_pages_context_name(self):
-        return self.num_pages_context_name
-
-    def get_paginated_by(self):
-        return self.paginated_by
-
-    def get_current_page(self):
-        context_name = self.get_page_context_name()
-        if self.request.method in ('POST', 'PUT'):
-            page = int(self.request.POST[context_name])
-        elif self.request.method == 'GET':
-            page = int(self.request.GET[context_name])
-        else:
-            raise KeyError("page")
-
-        return page
-
-    def get_num_pages(self):
-        try:
-            num_pages = self.queryset.count() / self.paginated_by or 1
-        except AttributeError:
-            num_pages = None
-
-        return num_pages
-
-    def get_query_page(self, page):
-        init_range = self.paginated_by * (page - 1)
-        end_range = self.paginated_by * page
-        return self.queryset[init_range:end_range]
+__all__ = ['AjaxFormMixin']
 
 
 class AjaxFormMixin(object):
     """
     A mixin that provides a way to show and handle a form in a request.
     """
-
-    initial = {}
+    response_class = HttpResponse
+    initial_data = {}
     form_class = {
         'GET': None,
         'POST': None,
         'PUT': None,
         'DELETE': None,
+        'PATCH': None,
     }
+    order_by = ''
     success_url = None
 
-    def get_initial(self):
+    def get_initial_data(self):
         """
-        Returns the initial data to use for forms on this view.
+        Returns the initial_data data to use for forms on this view.
         """
-        return self.initial.copy()
+        return self.initial_data.copy()
 
     def get_form_class(self):
         """
@@ -75,19 +40,22 @@ class AjaxFormMixin(object):
         """
         Returns an instance of the form to be used in this view.
         """
-        return form_class(**self.get_form_kwargs())
+        if form_class:
+            return form_class(**self.get_form_kwargs())
+
+        return None
 
     def get_form_kwargs(self):
         """
-        Returns the keyword arguments for instanciating the form.
+        Returns the keyword arguments for instancing the form.
         """
-        kwargs = {'initial': self.get_initial()}
-        if self.request.method in ('POST', 'PUT'):
+        kwargs = {'initial': self.get_initial_data()}
+        if self.request.method in ('POST', 'PUT', 'PATCH'):
             kwargs.update({
                 'data': self.request.POST,
                 'files': self.request.FILES,
             })
-        elif self.request.method == 'GET':
+        else:
             kwargs.update({
                 'data': self.request.GET,
             })
@@ -105,66 +73,12 @@ class AjaxFormMixin(object):
                 "No URL to redirect to. Provide a success_url.")
         return url
 
-    def query_response(self, **kwargs):
-        # Get queries
-        query = self.make_query(**kwargs)
-
-        # Make paginator context
-        try:
-            paginator = {
-                self.get_page_context_name(): self.get_current_page(),
-                self.get_num_pages_context_name(): self.get_num_pages(),
-                'paginated_by': self.get_paginated_by()
-            }
-
-            response = {
-                'query': query,
-                'paginator': paginator
-            }
-        except (KeyError, AttributeError):
-            response = {
-                'query': query,
-            }
-
-        return self.render_to_response(response)
-
     def form_invalid(self, form):
         errors = []
         for field, error in form.errors.iteritems():
             errors.append(field)
 
         return self.error_response('Error in fields: ' + ', '.join(errors))
-
-
-class ModelAjaxFormMixin(AjaxFormMixin, MultipleObjectJSONMixin):
-    pass
-
-
-class JSONResponseMixin(object):
-    """
-    A mixin that can be used to render a JSON response.
-    """
-    response_class = HttpResponse
-
-    def render_to_response(self, context, **response_kwargs):
-        """
-        Returns a JSON response, transforming 'context' to make the payload.
-        """
-        response_kwargs['content_type'] = 'application/json'
-
-        try:
-            json_response = self.convert_context_to_json(context)
-            return self.response_class(json_response, **response_kwargs)
-        except Exception as e:
-            return self.error_response(str(e))
-
-    def convert_context_to_json(self, context):
-        """
-        Convert the context dictionary into a JSON object"
-        :param context: Context dictionary
-        :return: JSON object
-        """
-        return json.dumps(context)
 
     def error_response(self, msg, **kwargs):
         kwargs['content_type'] = 'application/json'
@@ -181,31 +95,8 @@ class JSONResponseMixin(object):
             **kwargs
         )
 
-    def filter_query_get(self, **kwargs):
-        """Make QuerySets
-        """
-        return None
+    def filter_query(self, filter_form):
+        pass
 
-
-class MongoJSONResponseMixin(MultipleObjectJSONMixin, JSONResponseMixin):
-    def convert_context_to_json(self, context):
-        try:
-            # Dump query
-            query = context['query']
-            query_str = '"query": ' + query.to_json()
-
-            try:
-                # Dump paginator
-                paginator = context['paginator']
-                paginator_str = '"paginator": ' + json.dumps(paginator)
-
-                # Compose response
-                response_str = "{" + paginator_str + ", " + query_str + "}"
-            except KeyError:
-                response_str = "{" + query_str + "}"
-
-            return response_str
-        except AttributeError:
-            raise AttributeError('Error parsing query into JSON')
-        except KeyError:
-            raise AttributeError('Invalid query')
+    def order_query(self):
+        self.queryset = self.queryset.order_by(self.order_by)

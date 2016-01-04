@@ -9,4 +9,4 @@ INSTALLED_APPS = [
     'audit',
 ]
 
-AUDIT_LOGGING = False
+EBURY_AUDIT_LOGGING = False

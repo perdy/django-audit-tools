@@ -1,8 +1,14 @@
+# -*- encoding: utf-8 -*-
+"""
+Module that defines an internal cache for managing processes and accesses through threads.
+"""
 from __future__ import unicode_literals
 
 import threading
 
 from mongoengine import DoesNotExist
+
+__all__ = ['THREAD_NAMESPACE', 'get_process', 'set_process', 'get_last_access', 'set_last_access']
 
 THREAD_NAMESPACE = threading.local()
 

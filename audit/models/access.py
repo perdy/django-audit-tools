@@ -12,6 +12,8 @@ from audit.managers import AccessQuerySet
 from audit.utils import dynamic_import
 from audit.models.process import Process
 
+__all__ = ['Access']
+
 
 class AccessTime(EmbeddedDocument):
     """Time field for Access document.
@@ -30,8 +32,8 @@ class AccessTime(EmbeddedDocument):
 class AccessView(EmbeddedDocument):
     """View field for Access document.
     """
-    full_name = StringField()
-    app = StringField()
+    full_name = StringField(required=True)
+    app = StringField(required=True)
     name = StringField(required=True)
     args = ListField()
     kwargs = DictField()
@@ -109,8 +111,9 @@ class AccessRequest(EmbeddedDocument):
 @python_2_unicode_compatible
 class Access(Document):
     """Information gathered from a request and response objects.
+    Contains the following structure:
 
-    :cvar request_hash: Hash value of request.
+    :cvar interlink_id: Interlink id.
     :cvar request: Request.
     :cvar response: Response content, type and status code.
     :cvar exception: Exception raised.
@@ -152,7 +155,6 @@ class Access(Document):
         'app_label': 'audit',
         'db_alias': settings.DB_ALIAS
     }
-    meta['indexes'].extend(settings.ACCESS_INDEXES)
 
     @property
     def url(self):
@@ -214,7 +216,15 @@ class Access(Document):
         """
         return self.to_mongo().items()
 
+    def verbose_str(self):
+        """Verbose string representation.
+
+        :return: Verbose string representation.
+        :rtype: str
+        """
+        return "Access to view {} from app {} mapped to url {} by user {} ({})".format(
+                self.view.name, self.view.app, self.request.path, self.user.username, self.time.request)
+
     def __str__(self):
-        return "{} url:{} timestamp:{}".format(self.view.full_name, self.request.path, self.time.request)
-
-
+        return "Access{{{}, user:{}, url:{}, time:{}}}".format(self.view.full_name, self.user.username,
+                                                               self.request.path, self.time.request)

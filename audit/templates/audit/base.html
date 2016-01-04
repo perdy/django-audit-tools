@@ -1,0 +1,28 @@
+{% extends "base_audit_tools.html" %}
+
+{% load static %}
+
+{% block title %}Audit Tools{% endblock title %}
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "vendor/bootstrap/dist/css/bootstrap.min.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static "vendor/bootstrap/dist/css/bootstrap-theme.min.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static "vendor/bootstrapformhelpers/css/bootstrap-formhelpers.min.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static "audit/css/base.css" %}">
+{% endblock css %}
+{% block content %}
+  <div id="loadScreen">
+    <button class="btn btn-lg btn-default loading-btn"><span class="glyphicon glyphicon-refresh spin"></span> Loading...</button>
+  </div>
+{% endblock content %}
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" language="javascript" src="{% static "vendor/jquery/dist/jquery.min.js" %}"></script>
+  <script type="text/javascript" language="javascript" src="{% static "vendor/underscore/underscore-min.js" %}"></script>
+  <script type="text/javascript" language="javascript" src="{% static "vendor/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+  <script type="text/javascript" language="javascript"
+          src="{% static "vendor/bootstrapformhelpers/js/bootstrap-formhelpers.min.js" %}"></script>
+  <script type="text/javascript" language="javascript" src="{% static "vendor/backbone/backbone.js" %}"></script>
+  <script type="text/javascript" language="javascript" src="{% static "audit/js/audit.js" %}"></script>
+{% endblock js %}
+

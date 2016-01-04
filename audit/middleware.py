@@ -33,8 +33,11 @@ class AuditMiddleware(object):
         self._disabled = False
         self._view = {}
         self._time = {}
+        self._user = None
         self._process = None
         self._access = None
+        self._response = {}
+        self._exception = {}
 
         # Dynamic import of provider functions
         self._providers = import_providers()
@@ -57,44 +60,15 @@ class AuditMiddleware(object):
 
         if not self._disabled:
             try:
-                # Extract module data from view
-                try:
-                    full_name = view_func.__self__.__class__
-                except AttributeError:
-                    full_name = view_func.__module__ + '.' + view_func.__name__
+                view_data = self._extract_view_data(view_func, view_args, view_kwargs)
 
-                app = full_name.split('.', 1)[0]
+                self._blacklisted = self._check_blacklist(request.path, view_data['app'])
 
-                self._blacklisted = self._check_blacklist(request.path, app)
-
-                logger.debug("<Process View> View:%s %s", full_name, 'BlackList' if self._blacklisted else '')
+                logger.debug("<Process View> View:%s %s", view_data['full_name'], 'BlackList' if self._blacklisted else '')
 
                 if not self._blacklisted:
-                    # View's data
-                    name = full_name.rsplit('.', 1)[1]
-                    args = view_args
-                    kwargs = view_kwargs
-
-                    self._view = {
-                        'full_name': full_name,
-                        'app': app,
-                        'name': name,
-                        'args': args,
-                        'kwargs': kwargs,
-                    }
-
-                    # User
-                    try:
-                        user_id = request.user.id or 0
-                        user_username = request.user.username or ''
-                    except:
-                        user_id = 0
-                        user_username = ''
-
-                    user = {
-                        'id': user_id,
-                        'username': user_username,
-                    }
+                    self._view = view_data
+                    user = self._extract_user_data(request)
 
                     # Time
                     self._time = {
@@ -130,7 +104,7 @@ class AuditMiddleware(object):
                     logger.info("<Process View> View:%s", self._view['full_name'])
 
                     logger.debug("View:%s", str(self._view))
-            except:
+            except Exception:
                 logger.exception("<Process View>")
 
         return None
@@ -155,24 +129,7 @@ class AuditMiddleware(object):
 
             if not self._blacklisted and not self._disabled:
                 # Response
-                try:
-                    content_type = response.get('Content-Type', '')
-                    ct = content_type.lower()
-
-                    if 'json' in ct:
-                        response_content = loads(response._container[0])
-                    elif 'xml' in ct:
-                        response_content = response._container[0].decode('utf-8', errors='ignore')
-                    else:
-                        response_content = None
-                except:
-                    response_content = None
-
-                resp = {
-                    'content': fix_dict(response_content),
-                    'type': response.get('Content-Type', ''),
-                    'status_code': response.status_code,
-                }
+                self._response = self._extract_response_data(response)
 
                 # Time
                 self._time['response'] = datetime.datetime.now()
@@ -182,14 +139,14 @@ class AuditMiddleware(object):
                 custom = {k: v for k, v in custom.iteritems() if v is not None and len(v) > 0}
 
                 # Save Access and Process
-                self._access = update_access(self._access, response=resp, time=self._time, custom=custom)
+                self._access = update_access(self._access, response=self._response, time=self._time, custom=custom)
 
                 if not settings.RUN_ASYNC:
                     save_access(self._access)
                 else:
                     save_access.apply_async((self._access, ))
                 logger.info("<Process Response> View:%s", self._view['full_name'])
-        except:
+        except Exception:
             logger.exception("<Process Response>")
 
         return response
@@ -220,22 +177,17 @@ class AuditMiddleware(object):
                 custom = {app: f(request) for app, f in self._providers.iteritems()}
                 custom = {k: v for k, v in custom.iteritems() if v is not None and len(v) > 0}
 
-                # Exception
-                e = {
-                    'type': exception.__class__.__name__,
-                    'message': unicode(exception.message),
-                    'trace': traceback.format_exc(),
-                }
+                self._exception = self._extract_exception_data(exception)
 
                 # Save Access and Process
-                self._access = update_access(self._access, time=self._time, custom=custom, exception=e)
+                self._access = update_access(self._access, time=self._time, custom=custom, exception=self._exception)
 
                 if not settings.RUN_ASYNC:
                     save_access(self._access)
                 else:
                     save_access.apply_async((self._access, ))
                 logger.info("<Process Exception> View:%s Message:%s", self._view['full_name'], exception.message)
-        except:
+        except Exception:
             logger.exception("<Process Exception>")
 
         return None
@@ -263,6 +215,95 @@ class AuditMiddleware(object):
             blacklisted = s is not None and (len(s.groups()) > 0)
 
         return blacklisted
+
+    def _extract_view_data(self, view_func, view_args, view_kwargs):
+        """Extract view data that will be stored in Access model.
+
+        :param view_func: Function or method that act as a Django view.
+        :type view_func: function
+        :param view_args: View args.
+        :type view_args: list
+        :param view_kwargs: View kwargs.
+        :type view_kwargs: dict
+        :return: Extracted data.
+        :rtype: dict
+        """
+        try:
+            name = view_func.__self__.__class__.__name__
+        except AttributeError:
+            name = view_func.__name__
+
+        full_name = view_func.__module__ + '.' + name
+        app = full_name.split('.', 1)[0]
+
+        return {
+            'full_name': full_name,
+            'app': app,
+            'name': name,
+            'args': view_args,
+            'kwargs': view_kwargs,
+        }
+
+    def _extract_user_data(self, request):
+        """Extract user data from a request.
+
+        :param request: Django request.
+        :type request: django.http.HttpRequest
+        :return: Extracted data.
+        :rtype: dict
+        """
+        try:
+            user_id = request.user.id or -1
+            user_username = request.user.username or 'Anonymous'
+        except:
+            user_id = -1
+            user_username = 'Anonymous'
+
+        return {
+            'id': user_id,
+            'username': user_username,
+        }
+
+    def _extract_response_data(self, response):
+        """Extract response data.
+
+        :param response: Django http response object.
+        :type response: django.http.HttpResponse
+        :return: Extracted data.
+        :rtype: dict
+        """
+        try:
+            content_type = response.get('Content-Type', '')
+            ct = content_type.lower()
+
+            if 'json' in ct:
+                response_content = loads(response._container[0])
+            elif 'xml' in ct:
+                response_content = response._container[0].decode('utf-8', errors='ignore')
+            else:
+                response_content = None
+        except:
+            response_content = None
+
+        return {
+            'content': fix_dict(response_content),
+            'type': response.get('Content-Type', ''),
+            'status_code': response.status_code,
+            }
+
+    def _extract_exception_data(self, exception):
+        """Extract exception data.
+
+        :param exception: Exception object.
+        :type exception: Exception
+        :return: Extracted data.
+        :rtype: dict
+        """
+        return {
+            'type': exception.__class__.__name__,
+            'message': unicode(exception.message),
+            'trace': traceback.format_exc(),
+            }
 
 
 def custom_provider(*args, **kwargs):
