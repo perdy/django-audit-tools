@@ -1,7 +1,13 @@
+# -*- encoding: utf-8 -*-
+"""
+Module with some factory methods for models.
+"""
 from __future__ import unicode_literals
 import datetime
 
 from audit.cache import get_process
+
+__all__ = ['create_access', 'create_model_action', 'update_access']
 
 
 def create_model_action(model_action_data, access, process):

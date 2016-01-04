@@ -13,6 +13,8 @@ from audit.managers import ModelActionQuerySet
 from audit.models import Access, Process
 from audit.utils import dynamic_import
 
+__all__ = ['ACTIONS', 'ModelAction']
+
 
 class ACTIONS(object):
     """Enumerate class for actions over models.
@@ -76,6 +78,7 @@ class ModelActionInstance(EmbeddedDocument):
 @python_2_unicode_compatible
 class ModelAction(Document):
     """Information from create, update or delete operations over a model.
+    Contains the following structure:
 
     :cvar model: Model full_name, app and name.
     :cvar action: Create, update or delete action.
@@ -112,7 +115,6 @@ class ModelAction(Document):
         'app_label': 'audit',
         'db_alias': settings.DB_ALIAS,
     }
-    meta['indexes'].extend(settings.MODEL_ACTION_INDEXES)
 
     @property
     def changes(self):
@@ -173,7 +175,7 @@ class ModelAction(Document):
                                                                     self.model.app, self.timestamp)
 
     def __str__(self):
-        return "{} pk:{} action:{} timestamp:{}".format(self.model.full_name, self.instance.id, self.action,
-                                                        self.timestamp)
+        return "ModelAction{{{}({}), action:{}, time:{}}}".format(self.model.full_name, self.instance.id, self.action,
+                                                                  self.timestamp)
 
 
