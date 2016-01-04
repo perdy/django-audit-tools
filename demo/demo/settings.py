@@ -18,7 +18,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'Audit.db',                    # Or path to database file if using sqlite3.
+        'NAME': 'EbAudit.db',                    # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -111,7 +111,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'interlink.middleware.InterlinkMiddleware',
+    'ebury_interlink.middleware.InterlinkMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -173,23 +173,23 @@ INSTALLED_APPS = (
 #     }
 # }
 
-# Audit settings
-AUDIT_ACTIVATE = True
-AUDIT_RUN_ASYNC = False
-AUDIT_LOGGING = True
-AUDIT_LOGGING_PATH = PROJECT_PATH
-AUDIT_CELERY_QUEUE = 'audit'
-AUDIT_LOGGED_MODELS = (
+# EbAudit settings
+EBURY_AUDIT_ACTIVATE = True
+EBURY_AUDIT_RUN_ASYNC = False
+EBURY_AUDIT_LOGGING = True
+EBURY_AUDIT_LOGGING_PATH = PROJECT_PATH
+EBURY_AUDIT_CELERY_QUEUE = 'audit'
+EBURY_AUDIT_LOGGED_MODELS = (
     'demo.models.Test',
 )
-AUDIT_BLACKLIST = {
+EBURY_AUDIT_BLACKLIST = {
     'demo': (
         r'^(?!(/access/|/modelaction/)).*$',
     )
 }
-AUDIT_CUSTOM_PROVIDER = {}
-AUDIT_DB_ALIAS = 'audit'
-AUDIT_DB_CONNECTION = {
+EBURY_AUDIT_CUSTOM_PROVIDER = {}
+EBURY_AUDIT_DB_ALIAS = 'audit'
+EBURY_AUDIT_DB_CONNECTION = {
     'HOST': '127.0.0.1',
     'NAME': 'ebptrading-audit',
     'USER': os.environ.get('DB_AUDIT_USER'),

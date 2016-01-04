@@ -36,7 +36,7 @@ urlpatterns = patterns('',
     url(r'^modelaction/update/$', UpdateModelActionView.as_view(), name='update_modelaction'),
     url(r'^modelaction/delete/$', DeleteModelActionView.as_view(), name='delete_modelaction'),
     url(r'^modelaction/last/$', LastModelActionView.as_view(), name='last_modelaction'),
-    # Audit URLs
+    # Ebury Audit URLs
     url(r'^audit/', include('audit.urls'))
 )
 

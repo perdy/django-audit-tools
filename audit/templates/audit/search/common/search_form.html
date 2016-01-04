@@ -1,0 +1,57 @@
+<div class="form-group">
+  <div class="col-xs-1">
+    <button type="button" class="btn btn-danger remove-date-button" id="remove_date_from"
+            data-target="from">
+      <span class="glyphicon glyphicon-trash"></span>
+    </button>
+  </div>
+
+  <label class="col-xs-1 control-label" for="input_date_from">From</label>
+
+  <div class="col-xs-2">
+    <div id="input_date_from" class="bfh-datepicker input_from" data-date="today" data-name="date_from_0"
+         data-format="d/m/y"></div>
+  </div>
+
+  <div class="col-xs-2">
+    <div id="input_time_from" class="bfh-timepicker input_from" data-time="00:00" data-name="date_from_1"></div>
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-xs-1">
+    <button type="button" class="btn btn-danger remove-date-button" id="remove_date_to" data-target="to">
+      <span class="glyphicon glyphicon-trash"></span>
+    </button>
+  </div>
+
+  <label class="col-xs-1 control-label" for="input_date_to">To</label>
+
+  <div class="col-xs-2">
+    <div id="input_date_to" class="bfh-datepicker input_to" data-date="today" data-name="date_to_0"
+         data-format="d/m/y"></div>
+  </div>
+
+  <div class="col-xs-2">
+    <div id="input_time_to" class="bfh-timepicker input_to" data-time="23:59" data-name="date_to_1"></div>
+  </div>
+</div>
+
+<div id="filters"></div>
+
+<div class="form-group" id="add_filters">
+  <div class="col-xs-1">
+    <button type="button" class="btn btn-success add-filter-button" id="add_filter_button">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+  </div>
+  <div class="col-xs-2 col-xs-offset-1">
+    <select id="select_filter" class="form-control">
+      <option value="" style="display: none" selected disabled>Select a Filter</option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-xs-2">
+    <button type="submit" class="btn btn-primary" id="send_button">Search</button>
+  </div>
+</div>

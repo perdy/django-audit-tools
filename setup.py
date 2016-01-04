@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import os
 import sys
 
 from setuptools import setup
@@ -8,7 +8,7 @@ from setuptools.command.test import test as TestCommand
 
 import audit
 
-with open('requirements.txt', 'r') as f:
+with open(os.path.join(os.path.dirname(__file__), 'requirements.txt'), 'r') as f:
     requires = f.read().splitlines()
 
 
@@ -32,7 +32,7 @@ class Tox(TestCommand):
 
 
 setup(
-    name='django-status',
+    name='django-audit-tools',
     version=audit.__version__,
     description=audit.__description__,
     long_description='\n'.join([open('README.rst').read(), open('CHANGELOG').read()]),
@@ -43,13 +43,13 @@ setup(
     url=audit.__url__,
     download_url=audit.__url__,
     packages=[
-        'status',
+        'audit',
     ],
     include_package_data=True,
     install_requires=requires,
     license=open('LICENSE').read(),
     zip_safe=False,
-    keywords='python, django, database, cache, celery, status, check',
+    keywords='python, django, database, requests, audit, logging',
     classifiers=[
         # Framework
         'Framework :: Django',

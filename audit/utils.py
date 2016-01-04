@@ -211,10 +211,10 @@ def extract_process_data():
     # Name and args
     if sys.argv[0] == 'manage.py':
         name = sys.argv[1]
-        args = ''.join(sys.argv[2:])
+        args = ' '.join(sys.argv[2:])
     else:
         name = sys.argv[0]
-        args = ''.join(sys.argv[1:])
+        args = ' '.join(sys.argv[1:])
 
     # Machine
     machine = socket.gethostname()

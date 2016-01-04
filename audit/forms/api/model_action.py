@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from django import forms
 
+__all__ = ['ModelActionFilterForm']
+
 
 class ModelActionFilterForm(forms.Form):
     date_from = forms.SplitDateTimeField(required=False, input_date_formats=['%d/%m/%Y'])

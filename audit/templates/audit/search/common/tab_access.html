@@ -1,0 +1,280 @@
+<%
+function twoDigits(n) {
+  return (n > 9 ? n : '0' + n);
+};
+
+if (data !== {}) {
+
+var time_request = null;
+if (data.time.request) {
+  time_request = new Date(data.time.request);
+}
+var time_response = null;
+if (data.time.response) {
+  time_response = new Date(data.time.response);
+}
+var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+%>
+<table class="table table-hover">
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>View</span></th>
+  </tr>
+  <tr>
+    <th width="15%"><span>Application</span></th>
+    <td colspan="2"><span><%= data.view.app %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>Name</span></th>
+    <td colspan="2"><span><%= data.view.name %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>Args</span></th>
+    <td colspan="2"><span><%= data.view.args %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>Kwargs</span></th>
+    <td colspan="2"></td>
+  </tr>
+  <% for (key in data.view.kwargs) { %>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span><%= key %></span></th>
+    <td><span><%= data.view.kwargs[key] %></span></td>
+  </tr>
+  <% } %>
+  </tbody>
+  <% if (data.interlink_id) { %>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>Interlink</span></th>
+  </tr>
+  <tr>
+    <th width="15%"><span>ID</span></th>
+    <td colspan="2"><span><%= data.interlink_id %></span></td>
+  </tr>
+  </tbody>
+  <% } %>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>Time</span></th>
+  </tr>
+<% if (time_request) { %>
+  <tr>
+    <th width="15%"><span>Request</span></th>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Year</span></th>
+    <td><span><%= time_request.getFullYear() %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Month</span></th>
+    <td><span><%= monthNames[time_request.getMonth()] %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Day</span></th>
+    <td><span><%= time_request.getDate() %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Time</span></th>
+    <td><span><%- twoDigits(time_request.getHours()) %>:<%- twoDigits(time_request.getMinutes()) %>:<%- twoDigits(time_request.getSeconds()) %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Timezone</span></th>
+    <%
+    var timezone = -(time_request.getTimezoneOffset() / 60);
+    if (timezone >= 0) {
+    strTimezone = "GMT+" + timezone;
+    } else {
+    strTimezone = "GMT" + timezone;
+    }
+    %>
+    <td><span><%= strTimezone %></span></td>
+  </tr>
+<%
+  }
+  if (time_response) {
+%>
+  <tr>
+    <th width="15%"><span>Response</span></th>
+    <td colspan="2"></td>
+  </tr>
+   <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Year</span></th>
+    <td><span><%= time_response.getFullYear() %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Month</span></th>
+    <td><span><%= monthNames[time_response.getMonth()] %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Day</span></th>
+    <td><span><%= time_response.getDate() %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Time</span></th>
+    <td><span><%- twoDigits(time_response.getHours()) %>:<%- twoDigits(time_response.getMinutes()) %>:<%- twoDigits(time_response.getSeconds()) %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span>Timezone</span></th>
+    <%
+    var timezone = -(time_response.getTimezoneOffset() / 60);
+    if (timezone >= 0) {
+    strTimezone = "GMT+" + timezone;
+    } else {
+    strTimezone = "GMT" + timezone;
+    }
+    %>
+    <td><span><%= strTimezone %></span></td>
+  </tr>
+<% } %>
+  </tbody>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>User</span></th>
+  </tr>
+  <tr>
+    <th width="15%"><span>Username</span></th>
+    <td colspan="2"><span><%= data.user.username %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>ID</span></th>
+    <td colspan="2"><span><%= data.user.id %></span></td>
+  </tr>
+  </tbody>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>Request</span></th>
+  </tr>
+  <tr>
+    <th width="15%"><span>Path</span></th>
+    <td colspan="2"><span><%= data.request.path %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>GET</span></th>
+    <td colspan="2"></td>
+  </tr>
+  <% for (key in data.request.GET) { %>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span><%= key %></span></th>
+    <td><span><%= data.request.GET[key] %></span></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th width="15%"><span>POST</span></th>
+    <td colspan="2"></td>
+  </tr>
+  <% for (key in data.request.POST) { %>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span><%= key %></span></th>
+    <td><span><%= data.request.POST[key] %></span></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th width="15%"><span>COOKIES</span></th>
+    <td colspan="2"></td>
+  </tr>
+  <% for (key in data.request.COOKIES) { %>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span><%= key %></span></th>
+    <td><span><%= data.request.COOKIES[key] %></span></td>
+  </tr>
+  <% } %>
+  <% if (data.request.METADATA) { %>
+  <tr>
+    <th width="15%"><span>METADATA</span></th>
+    <td colspan="2"></td>
+  </tr>
+  <% for (key in data.request.METADATA) { %>
+  <tr>
+    <th width="15%"></th>
+    <th width="15%"><span><%= key %></span></th>
+    <td><span><%= data.request.METADATA[key] %></span></td>
+  </tr>
+  <% } %>
+  <% } else { %>
+  <tr>
+    <th width="15%"><span>METADATA</span></th>
+    <td colspan="2"><span><%= data.request.RAW_METADATA %></span></td>
+  </tr>
+  <% } %>
+  </tbody>
+  <% if (data.response) { %>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>Response</span></th>
+  </tr>
+  <tr>
+    <th width="15%"><span>Content</span></th>
+    <td colspan="2"><span><%= data.response.content %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>Type</span></th>
+    <td colspan="2"><span><%= data.response.type %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>Status code</span></th>
+    <td colspan="2"><span><%= data.response.status_code %></span></td>
+  </tr>
+  </tbody>
+  <% } else if (data.exception) { %>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>Exception</span></th>
+  </tr>
+  <tr>
+    <th width="15%"><span>Message</span></th>
+    <td colspan="2"><span><%= data.exception.message %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>Type</span></th>
+    <td colspan="2"><span><%= data.exception.type %></span></td>
+  </tr>
+  <tr>
+    <th width="15%"><span>Trace</span></th>
+    <td colspan="2"><span><%= data.exception.trace %></span></td>
+  </tr>
+  </tbody>
+  <% } %>
+  <% if (data.custom.length > 0) { %>
+  <tbody>
+  <tr class="active">
+    <th width="15%"></th>
+    <th colspan="2"><span>Custom</span></th>
+  </tr>
+  <% for (app in data.custom) { %>
+  <tr>
+    <th width="15%"><span><% app %></span></th>
+    <td colspan="2"><span><%= data.custom[app] %></span></td>
+  </tr>
+  <% }; %>
+  </tbody>
+  <% } %>
+</table>
+<% } else { %>
+<div>
+  <h5>Access not found</h5>
+</div>
+<% }; %>

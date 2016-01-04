@@ -4,66 +4,66 @@
 Configuration
 =============
 
-To configure Audit you need to follow the next steps:
+To configure Ebury Audit you need to follow the next steps:
 
-#. Add *audit* to your **INSTALLED_APPS** settings like this::
+#. Add *ebury_audit* to your **INSTALLED_APPS** settings like this::
 
     INSTALLED_APPS = (
         ...
-        'audit',
+        'ebury_audit',
     )
 
-#. Add *audit.middleware.AuditMiddleware* to your **MIDDLEWARE_CLASSES** settings like this::
+#. Add *ebury_audit.middleware.AuditMiddleware* to your **MIDDLEWARE_CLASSES** settings like this::
 
     MIDDLEWARE_CLASSES = (
         ...
-        'audit.middleware.AuditMiddleware',
+        'ebury_audit.middleware.AuditMiddleware',
     )
 
-#. Configure blacklisted URLs in **AUDIT_BLACKLIST** settings.
-#. Register models that will be logged in **AUDIT_LOGGED_MODELS** settings.
+#. Configure blacklisted URLs in **EBURY_AUDIT_BLACKLIST** settings.
+#. Register models that will be logged in **EBURY_AUDIT_LOGGED_MODELS** settings.
 #. Execute the next django command::
 
-    python manage.py prepare_audit
+    python manage.py prepare_ebury_audit
 
 Settings
 ========
 
-AUDIT_ACTIVATE
---------------
+EBURY_AUDIT_ACTIVATE
+--------------------
 
 Activate or deactivate audit.
 
 Default::
 
-    AUDIT_ACTIVATE = False
+    EBURY_AUDIT_ACTIVATE = False 
 
-AUDIT_DB_ALIAS
---------------
+EBURY_AUDIT_DB_ALIAS
+--------------------
 
 MongoDB connection alias.
 
 Default::
 
-    AUDIT_DB_ALIAS = 'audit'
+    EBURY_AUDIT_DB_ALIAS = 'ebury_audit'
 
-AUDIT_DB_CONNECTION
--------------------
+EBURY_AUDIT_DB_CONNECTION
+-------------------------
 
 MongoDB connection parameters.
 
 Default::
 
-    AUDIT_DB_CONNECTION = {
+    EBURY_AUDIT_DB_CONNECTION = {
         'HOST': 'localhost',
         'PORT': 27017,
-        'NAME': 'audit',
+        'NAME': 'ebury_audit',
         'USER': '',
         'PASSWORD': '',
     }
 
-AUDIT_RUN_ASYNC
----------------
+EBURY_AUDIT_RUN_ASYNC
+---------------------
 
 Use Celery to run in async mode.
 
@@ -71,40 +71,40 @@ Use Celery to run in async mode.
 
 Default::
 
-    AUDIT_RUN_ASYNC = False
+    EBURY_AUDIT_RUN_ASYNC = False
 
-AUDIT_CELERY_QUEUE
-------------------
+EBURY_AUDIT_CELERY_QUEUE
+------------------------
 
 Celery queue name.
 
 Default::
 
-    AUDIT_CELERY_QUEUE = 'audit'
+    EBURY_AUDIT_CELERY_QUEUE = 'ebury_audit'
 
-AUDIT_LOGGED_MODELS
--------------------
+EBURY_AUDIT_LOGGED_MODELS
+-------------------------
 
 List of models that will be logged for audit. Each entry consists in a string that represents a model using *"<module>.<model>"* format.
 
 Example::
 
-    AUDIT_LOGGED_MODELS = (
-        'audit.models.Access',
+    EBURY_AUDIT_LOGGED_MODELS = (
+        'ebury_audit.models.Access',
     )
 
 Default::
 
-    AUDIT_LOGGED_MODELS = ()
+    EBURY_AUDIT_LOGGED_MODELS = ()
 
-AUDIT_BLACKLIST
----------------
+EBURY_AUDIT_BLACKLIST
+---------------------
 
 Blacklisted URLs. Each application may have a tuple of regex patterns. If an URL matches a pattern will not be logged. Use empty string key for match in all applications.
 
 Example::
 
-    AUDIT_BLACKLIST = {
+    EBURY_AUDIT_BLACKLIST = {
         'api': (
             r'^/api/',
             r'^/API/',
@@ -116,43 +116,43 @@ Example::
 
 Default::
 
-    AUDIT_BLACKLIST = {}
+    EBURY_AUDIT_BLACKLIST = {}
 
-AUDIT_CUSTOM_PROVIDER
----------------------
+EBURY_AUDIT_CUSTOM_PROVIDER
+---------------------------
 
 Custom data provider. Each application may add custom data to Access entries using own functions.
 
 Default::
 
-    AUDIT_CUSTOM_PROVIDER = {
-        'audit': 'audit.middleware.custom_provider',
+    EBURY_AUDIT_CUSTOM_PROVIDER = {
+        'ebury_audit': 'ebury_audit.middleware.custom_provider',
     }
 
-AUDIT_LOGGING
--------------
+EBURY_AUDIT_LOGGING
+-------------------
 
-Activate logs for Audit.
+Activate logs for Ebury Audit.
 
 Default::
 
-    AUDIT_LOGGING = True
+    EBURY_AUDIT_LOGGING = True
 
-AUDIT_LOGGING_PATH
-------------------
+EBURY_AUDIT_LOGGING_PATH
+------------------------
 
 Path where logs will be stored.
 
 Default::
 
-    AUDIT_LOGGING_PATH = settings.SITE_ROOT or ''
+    EBURY_AUDIT_LOGGING_PATH = settings.SITE_ROOT or ''
 
-AUDIT_TRANSLATE_URLS
---------------------
+EBURY_AUDIT_TRANSLATE_URLS
+--------------------------
 
-Translate Audit URLs:
+Translate ebury-audit URLs:
 
 Default::
 
-    AUDIT_TRANSLATE_URLS = False
+    EBURY_AUDIT_TRANSLATE_URLS = False
 

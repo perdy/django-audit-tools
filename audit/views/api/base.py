@@ -1,36 +1,30 @@
 from __future__ import unicode_literals
 
-from django.views.generic.edit import ProcessFormView
+from rest_framework_mongoengine.viewsets import ReadOnlyModelViewSet
+from audit.permissions import APIAccess
 
-from audit.views.api.mixins import MongoJSONResponseMixin, ModelAjaxFormMixin
-
-
-class BaseApiView(ModelAjaxFormMixin, ProcessFormView):
-    pass
+from audit.views.api.mixins import AjaxFormMixin
+from audit.models.serializers import CurrentPageSerializer
 
 
-class ApiView(MongoJSONResponseMixin, BaseApiView):
-    def get(self, request, *args, **kwargs):
-        if 'pk' in kwargs:
-            return self.query_response(pk=kwargs['pk'])
-        else:
-            # There is no arguments for form so no filtering
-            if (len(request.GET.keys()) == 2 and 'csrfmiddlewaretoken' in request.GET and 'page' in request.GET) \
-                    or (len(request.GET.keys()) == 1 and 'csrfmiddlewaretoken' in request.GET):
-                return self.query_response()
-            # Filter
+class APIViewSet(AjaxFormMixin, ReadOnlyModelViewSet):
+    """Base viewset for API views.
+    """
+    pagination_serializer_class = CurrentPageSerializer
+    permission_classes = (APIAccess, )
+
+    def get_queryset(self):
+        if not self.queryset:
+            self.queryset = self.model.objects.all()
+
+        filter_form = self.get_form(self.get_form_class())
+        if filter_form:
+            if filter_form.is_valid():
+                self.filter_query(filter_form=filter_form)
             else:
-                form_class = self.get_form_class()
-                form = self.get_form(form_class)
-                if form.is_valid():
-                    return self.query_response(filter_form=form)
-                else:
-                    return self.form_invalid(form)
+                return self.form_invalid(filter_form)
 
-    def post(self, request, *args, **kwargs):
-        return self.error_response('POST method not implemented')
+        if self.order_by:
+            self.order_query()
 
-    def put(self, request, *args, **kwargs):
-        return self.error_response('PUT method not implemented')
-
-
+        return self.queryset

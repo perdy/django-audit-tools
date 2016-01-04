@@ -24,7 +24,8 @@ def save_access(access):
 
 @app.task(queue=settings.CELERY_QUEUE)
 def save_model_action(model_action_data, access, process):
-    from audit.models import create_model_action, Access
+    from audit.models import Access
+    from audit.models.models_factory import create_model_action
     try:
         logger.debug("Pre save ModelAction")
         try:

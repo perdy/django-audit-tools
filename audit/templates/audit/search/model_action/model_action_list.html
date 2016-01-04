@@ -1,0 +1,39 @@
+<div class="row">
+  <div id="result_list" class="col-xs-12">
+    <div class="panel-group" id="panel_result_list">
+      <div class="row result-header">
+        <div class="col-xs-3">
+          <h4>Model</h4>
+        </div>
+        <div class="col-xs-2">
+          <h4>ID</h4>
+        </div>
+        <div class="col-xs-2">
+          <h4>Action</h4>
+        </div>
+        <div class="col-xs-5">
+          <h4>Date</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div id="pagination" class="col-xs-12 text-center">
+    <ul class="pagination">
+      <li data-page="1"><a href="">&laquo;</a></li>
+      <%
+      var first = (current_page <= 5) ? 1 : current_page-5;
+      var last = (current_page > (num_pages-5)) ? num_pages : current_page+5;
+      last = (last == 0) ? 1 : last;
+      for (var i = first; i <= last; i++) {
+        if (i != current_page) {
+      %>
+      <li data-page="<%- i %>"><a href=""><%= i %></a></li>
+        <% } else { %>
+      <li class="active" data-page="<%- i %>"><a href=""><%= i %></a></li>
+      <% }}; %>
+      <li data-page="<%- num_pages %>"><a href="">&raquo;</a></li>
+    </ul>
+  </div>
+</div>
