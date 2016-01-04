@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+from rest_framework import permissions
+
 """
 This module implements permissions in audit using default database of django
 """
@@ -25,17 +27,16 @@ def register_permissions():
         try:
             model_action_content_type = ContentType.objects.get(
                 app_label='audit',
-                name='model action',
-                model='modelaction'
+                name='audit',
+                model='audit'
             )
-            logger.warn('Content type registered yet: audit modelaction')
+            logger.warn('Content type registered yet: audit')
         except ContentType.DoesNotExist:
-            model_action_content_type = ContentType(
+            model_action_content_type = ContentType.objects.create(
                 app_label='audit',
-                name='model action',
-                model='modelaction'
+                name='audit',
+                model='audit'
             )
-            model_action_content_type.save()
 
         for permission_code, permission_name in AUDIT_PERMISSIONS:
             try:
@@ -64,11 +65,37 @@ def unregister_permissions():
     Method to unregister permissions in database
     """
     try:
-        content_type = ContentType.objects.get(app_label='audit', name='model action', model='modelaction')
+        content_type = ContentType.objects.get(app_label='audit', name='audit', model='audit')
         Permission.objects.filter(content_type=content_type).delete()
-        ContentType.objects.filter(app_label='audit', name='model action', model='modelaction').delete()
-    except ContentType.DoesNotExist as ex:
-        logger.exception(ex.message)
+        ContentType.objects.filter(app_label='audit', name='audit', model='audit').delete()
+    except ContentType.DoesNotExist:
+        logger.exception("Audit isn't registered")
         return False
 
     return True
+
+
+class SearchAccess(permissions.BasePermission):
+    """
+    Global permission check for Search accesses.
+    """
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_authenticated() and user.has_perm('audit.search'):
+            return True
+
+        return False
+
+
+class APIAccess(permissions.BasePermission):
+    """
+    Global permission check for API accesses.
+    """
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_authenticated() and user.has_perm('audit.api'):
+            return True
+
+        return False
