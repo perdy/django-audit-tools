@@ -12,6 +12,7 @@ omit =
     *wsgi.py
     *celery.py
     */integration_tests/*
+    */apps.py
 
 [report]
 exclude_lines =
