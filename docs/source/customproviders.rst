@@ -18,9 +18,9 @@ The next example define a provider that returns polls associated to current user
 
         return res
 
-If this provider is defined inside :py:mod:`polls.utils` then must be set in :py:const:`.settings.EBURY_AUDIT_CUSTOM_PROVIDER`::
+If this provider is defined inside :py:mod:`polls.utils` then must be set in :py:const:`.settings.AUDIT_CUSTOM_PROVIDER`::
 
-    EBURY_AUDIT_CUSTOM_PROVIDER = {
+    AUDIT_CUSTOM_PROVIDER = {
         'polls': 'polls.utils.poll_provider',
     }
 

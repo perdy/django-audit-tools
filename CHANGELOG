@@ -1,0 +1,21 @@
+Changes
+=======
+0.3.0 - 05/01/2015
+ * Use nose as testing framework.
+ * Update requirements and create requirements for testing.
+ * Update code to work with Django Rest Framework 3.3+.
+ * Update code to work with Django Rest Framework Mongoengine 3.3+.
+ * Refactor main package to make audit a subpackage from audit_tools.
+ * Create a full tox.ini with coverage, nose, flake8 and sphinx.
+ * Create config file for coverage.
+ * Add integration with Travis CI.
+ * Add integration with Coveralls.
+
+0.2.0 - 04/01/2015
+ * Create an Api to provide Process, Access and ModelAction models as resources.
+ * Create a new view for searching Access models using Backbone and new Api.
+ * Refactor old ModelAction searching view using Backbone and new Api and unify with new Access view.
+ * Refactor middleware and signals modules to reduce method complexity and add a lot of tests.
+
+0.1.0 - 03/01/2016
+ * Initial release.

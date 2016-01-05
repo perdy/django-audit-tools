@@ -2,23 +2,29 @@
 Django Audit Tools
 ==================
 
+.. image:: https://travis-ci.org/PeRDy/django-audit-tools.svg?branch=master
+    :target: https://travis-ci.org/PeRDy/django-audit-tools
+.. image:: https://coveralls.io/repos/PeRDy/django-audit-tools/badge.svg?branch=master&service=github :target: https://coveralls.io/github/PeRDy/django-audit-tools?branch=master
+
 Django application that provides a set of tools for auditing requests and models and improve logging.
+
+Full documentation in `ReadTheDocs<http://django-audit-tools.readthedocs.org/>`_.
 
 Quick start
 ===========
 
-#. Add *audit* to your **INSTALLED_APPS** settings like this::
+#. Add *audit_tools* to your **INSTALLED_APPS** settings like this::
 
     INSTALLED_APPS = (
         ...
-        'audit',
+        'audit_tools',
     )
 
 #. Add *audit.middleware.AuditMiddleware* to your **MIDDLEWARE_CLASSES** settings like this::
 
     MIDDLEWARE_CLASSES = (
         ...
-        'audit.middleware.AuditMiddleware',
+        'audit_tools.audit.middleware.AuditMiddleware',
     )
 
 #. Configure blacklisted URLs in **AUDIT_BLACKLIST** settings.
@@ -42,7 +48,7 @@ Default::
 AUDIT_DB_ALIAS
 --------------
 
-MongoDB connection alias.
+Audit database connection alias.
 
 Default::
 
@@ -51,7 +57,7 @@ Default::
 AUDIT_DB_CONNECTION
 -------------------
 
-MongoDB connection parameters.
+Audit database connection parameters.
 
 Default::
 
@@ -91,7 +97,7 @@ List of models that will be logged for audit. Each entry consists in a string th
 Example::
 
     AUDIT_LOGGED_MODELS = (
-        'audit.models.Access',
+        'audit_tools.audit.models.Access',
     )
 
 Default::
@@ -119,7 +125,7 @@ Default::
 AUDIT_ACCESS_INDEXES
 --------------------
 
-Custom indexes for the accesses. There is the posibility to add new/custom indexes to the mongo database.
+Custom indexes for the accesses. There is the possibility to add new custom indexes to the Audit database.
 
 Example::
 
@@ -134,13 +140,13 @@ Example::
 AUDIT_PROCESS_INDEXES
 ---------------------
 
-Custom indexes for the processes. There is the posibility to add new/custom indexes to the mongo database.
+Custom indexes for the processes. There is the possibility to add new custom indexes to the Audit database.
 
 
 AUDIT_MODEL_ACTION_INDEXES
 --------------------------
 
-Custom indexes for the model actions. There is the posibility to add new/custom indexes to the mongo database.
+Custom indexes for the model actions. There is the possibility to add new custom indexes to the Audit database.
 
 
 AUDIT_CUSTOM_PROVIDER
@@ -151,7 +157,7 @@ Custom data provider. Each application may add custom data to Access entries usi
 Default::
 
     AUDIT_CUSTOM_PROVIDER = {
-        'audit': 'audit.middleware.custom_provider',
+        'audit_tools': 'audit_tools.audit.middleware.custom_provider',
     }
 
 AUDIT_TRANSLATE_URLS
@@ -162,4 +168,3 @@ Translate Audit URLs:
 Default::
 
     AUDIT_TRANSLATE_URLS = False
-

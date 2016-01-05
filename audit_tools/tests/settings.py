@@ -18,16 +18,12 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'EbAudit.db',                    # Or path to database file if using sqlite3.
+        'NAME': 'Audit.db',                    # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     },
-
-    'audit': {
-        'ENGINE': '',
-    }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -119,7 +115,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'audit_tools.audit.middleware.AuditMiddleware',
+    'audit.middleware.AuditMiddleware',
 )
 
 ROOT_URLCONF = 'demo.urls'
@@ -145,9 +141,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'demo',
     'audit_tools',
-    'ebury_interlink',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -155,32 +149,31 @@ INSTALLED_APPS = (
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'mail_admins': {
-#             'level': 'ERROR',
-#             'class': 'django.utils.log.AdminEmailHandler'
-#         }
-#     },
-#     'loggers': {
-#         'django.request': {
-#             'handlers': ['mail_admins'],
-#             'level': 'ERROR',
-#             'propagate': True,
-#         },
-#     }
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.NullHandler'
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    }
+}
 
-# EbAudit settings
+# Audit settings
 AUDIT_ACTIVATE = True
 AUDIT_RUN_ASYNC = False
 AUDIT_LOGGING = True
 AUDIT_LOGGING_PATH = PROJECT_PATH
 AUDIT_CELERY_QUEUE = 'audit'
 AUDIT_LOGGED_MODELS = (
-    'demo.models.Test',
 )
 AUDIT_BLACKLIST = {
     'demo': (

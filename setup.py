@@ -6,7 +6,7 @@ import sys
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
-import audit
+import audit_tools
 
 with open(os.path.join(os.path.dirname(__file__), 'requirements.txt'), 'r') as f:
     requires = f.read().splitlines()
@@ -33,17 +33,17 @@ class Tox(TestCommand):
 
 setup(
     name='django-audit-tools',
-    version=audit.__version__,
-    description=audit.__description__,
+    version=audit_tools.__version__,
+    description=audit_tools.__description__,
     long_description='\n'.join([open('README.rst').read(), open('CHANGELOG').read()]),
-    author=audit.__author__,
-    author_email=audit.__email__,
-    maintainer=audit.__author__,
-    maintainer_email=audit.__email__,
-    url=audit.__url__,
-    download_url=audit.__url__,
+    author=audit_tools.__author__,
+    author_email=audit_tools.__email__,
+    maintainer=audit_tools.__author__,
+    maintainer_email=audit_tools.__email__,
+    url=audit_tools.__url__,
+    download_url=audit_tools.__url__,
     packages=[
-        'audit',
+        'audit_tools',
     ],
     include_package_data=True,
     install_requires=requires,
