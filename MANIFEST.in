@@ -3,6 +3,7 @@ include CHANGELOG
 include README.rst
 include CONTRIBUTORS.rst
 include requirements.txt
+include requirements-base.txt
 recursive-exclude audit_tools.egg-info *
 recursive-exclude dist *
 recursive-exclude audit_tools/tests *

@@ -5,11 +5,13 @@ import sys
 
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
+from pip.req import parse_requirements
+from pip.download import PipSession
 
 import audit_tools
 
-with open(os.path.join(os.path.dirname(__file__), 'requirements.txt'), 'r') as f:
-    requires = f.read().splitlines()
+requirements_file = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+requires = [str(r.req) for r in parse_requirements(requirements_file, session=PipSession())]
 
 
 class Tox(TestCommand):
@@ -56,10 +58,9 @@ setup(
         # Environment
         'Environment :: Web Environment',
         # Intended Audience:
-        'Intended Audience :: Support',
+        'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
         'Intended Audience :: System Administrators',
-        'Intended Audience :: Telecommunications Industry',
         # License
         'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
         # Natural Language
