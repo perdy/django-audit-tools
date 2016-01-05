@@ -8,7 +8,7 @@ Django Audit Tools
 
 Django application that provides a set of tools for auditing requests and models and improve logging.
 
-Full documentation in `ReadTheDocs<http://django-audit-tools.readthedocs.org/>`_.
+Full documentation in ReadTheDocs_.
 
 Quick start
 ===========
@@ -168,3 +168,5 @@ Translate Audit URLs:
 Default::
 
     AUDIT_TRANSLATE_URLS = False
+
+.. _ReadTheDocs: http://django-audit-tools.readthedocs.org/
