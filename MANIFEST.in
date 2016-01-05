@@ -4,12 +4,15 @@ include README.rst
 include CONTRIBUTORS.rst
 include requirements.txt
 exclude demo/Audit.db
-recursive-exclude audit.egg-info *
+recursive-exclude audit_tools.egg-info *
 recursive-exclude dist *
+recursive-exclude audit_tools/tests *
+recursive-exclude * *.pyc
+recursive-exclude * __pycache__
 recursive-include demo *
 recursive-include docs *
 recursive-include docs/build *
-recursive-include audit/templates *
-recursive-include audit/static *
+recursive-include audit_tools/templates *
+recursive-include audit_tools/static *
 prune docs/build
 prune demo/audit
