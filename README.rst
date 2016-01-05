@@ -2,6 +2,10 @@
 Django Audit Tools
 ==================
 
+.. image:: https://travis-ci.org/PeRDy/django-audit-tools.svg?branch=master
+    :target: https://travis-ci.org/PeRDy/django-audit-tools
+.. image:: https://coveralls.io/repos/PeRDy/django-audit-tools/badge.svg?branch=master&service=github :target: https://coveralls.io/github/PeRDy/django-audit-tools?branch=master
+
 Django application that provides a set of tools for auditing requests and models and improve logging.
 
 Quick start
