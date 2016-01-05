@@ -30,8 +30,8 @@ def create_access(access, process):
 
 
 def update_access(access, **update_data):
-    from audit_tools.audit.models.access import AccessRequest, AccessTime, AccessView, AccessResponse, AccessException, \
-        AccessUser
+    from audit_tools.audit.models.access import AccessRequest, AccessTime, AccessView, AccessResponse, \
+        AccessException, AccessUser
     if 'request' in update_data:
         access.request = AccessRequest(**update_data['request'])
     if 'time' in update_data:
@@ -54,7 +54,8 @@ def update_access(access, **update_data):
 
 def _model_action_factory(model, action, content, instance, timestamp=datetime.datetime.now(), process=None,
                           access=None):
-    from audit_tools.audit.models.model_action import ModelActionModel, ModelActionContent, ModelActionInstance, ModelAction
+    from audit_tools.audit.models.model_action import ModelActionModel, ModelActionContent, ModelActionInstance, \
+        ModelAction
 
     model_document = ModelActionModel(**model)
     content_document = ModelActionContent(**content)
@@ -75,7 +76,8 @@ def _model_action_factory(model, action, content, instance, timestamp=datetime.d
 
 def _access_factory(request, time, view, response=None, exception=None, process=None, user=None, custom=None,
                     interlink_id=None):
-    from audit_tools.audit.models.access import AccessResponse, AccessTime, AccessView, AccessUser, AccessException, Access
+    from audit_tools.audit.models.access import AccessResponse, AccessTime, AccessView, AccessUser, AccessException, \
+        Access
 
     exception_document = AccessException(**exception) if exception else None
     response_document = AccessResponse(**response) if response else None
@@ -96,4 +98,3 @@ def _access_factory(request, time, view, response=None, exception=None, process=
     )
 
     return access
-

@@ -53,11 +53,9 @@ class Process(Document):
         :return: Verbose string representation.
         :rtype: str
         """
-        return "Process {} with pid {:d} run by {} on {} ({})".format(self.name, self.pid, self.user, self.machine,
-                                                                      self.creation_time)
+        return "Process {} with pid {:d} run by {} on {} ({})".format(
+            self.name, self.pid, self.user, self.machine, self.creation_time)
 
     def __str__(self):
         return "Process{{{}, pid:{:d}, user:{}, machine:{}, creation_time:{}}}".format(
-                self.name, self.pid, self.user, self.machine, self.creation_time)
-
-
+            self.name, self.pid, self.user, self.machine, self.creation_time)

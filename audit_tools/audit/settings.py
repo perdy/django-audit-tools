@@ -33,7 +33,8 @@ ACTIVATE = getattr(settings, 'AUDIT_ACTIVATE', False)
 DB_ALIAS = getattr(settings, 'AUDIT_DB_ALIAS', 'audit')
 
 # Database connection
-DB_CONNECTION = getattr(settings, 'AUDIT_DB_CONNECTION', {'HOST': 'localhost', 'PORT': 27017, 'NAME': 'audit', 'USER': '', 'PASSWORD': ''})
+DB_CONNECTION = getattr(settings, 'AUDIT_DB_CONNECTION',
+                        {'HOST': 'localhost', 'PORT': 27017, 'NAME': 'audit', 'USER': '', 'PASSWORD': ''})
 
 # Translate URLs
 TRANSLATE_URLS = getattr(settings, 'AUDIT_TRANSLATE_URLS', False)

@@ -119,7 +119,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'audit.middleware.AuditMiddleware',
+    'audit_tools.audit.middleware.AuditMiddleware',
 )
 
 ROOT_URLCONF = 'demo.urls'
@@ -146,7 +146,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'demo',
-    'audit',
+    'audit_tools',
     'ebury_interlink',
 )
 
@@ -174,24 +174,24 @@ INSTALLED_APPS = (
 # }
 
 # EbAudit settings
-EBURY_AUDIT_ACTIVATE = True
-EBURY_AUDIT_RUN_ASYNC = False
-EBURY_AUDIT_LOGGING = True
-EBURY_AUDIT_LOGGING_PATH = PROJECT_PATH
-EBURY_AUDIT_CELERY_QUEUE = 'audit'
-EBURY_AUDIT_LOGGED_MODELS = (
+AUDIT_ACTIVATE = True
+AUDIT_RUN_ASYNC = False
+AUDIT_LOGGING = True
+AUDIT_LOGGING_PATH = PROJECT_PATH
+AUDIT_CELERY_QUEUE = 'audit'
+AUDIT_LOGGED_MODELS = (
     'demo.models.Test',
 )
-EBURY_AUDIT_BLACKLIST = {
+AUDIT_BLACKLIST = {
     'demo': (
         r'^(?!(/access/|/modelaction/)).*$',
     )
 }
-EBURY_AUDIT_CUSTOM_PROVIDER = {}
-EBURY_AUDIT_DB_ALIAS = 'audit'
-EBURY_AUDIT_DB_CONNECTION = {
+AUDIT_CUSTOM_PROVIDER = {}
+AUDIT_DB_ALIAS = 'audit'
+AUDIT_DB_CONNECTION = {
     'HOST': '127.0.0.1',
-    'NAME': 'ebptrading-audit',
+    'NAME': 'audit',
     'USER': os.environ.get('DB_AUDIT_USER'),
     'PASSWORD': os.environ.get('DB_AUDIT_PASSWORD'),
 }

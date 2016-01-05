@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 import datetime
 
 from django.utils.encoding import python_2_unicode_compatible
-from mongoengine import EmbeddedDocument, StringField, DictField, IntField, Document, EmbeddedDocumentField, \
-    DateTimeField, ReferenceField
+from mongoengine import EmbeddedDocument, StringField, DictField, Document, EmbeddedDocumentField, DateTimeField, \
+    ReferenceField
 
 from audit_tools.audit import settings
 from audit_tools.audit.managers import ModelActionQuerySet
@@ -171,11 +171,9 @@ class ModelAction(Document):
         :return: Verbose string representation.
         :rtype: str
         """
-        return "{} instance {} of model {} from app {} ({})".format(self.action, self.instance.id, self.model.name,
-                                                                    self.model.app, self.timestamp)
+        return "{} instance {} of model {} from app {} ({})".format(
+            self.action, self.instance.id, self.model.name, self.model.app, self.timestamp)
 
     def __str__(self):
-        return "ModelAction{{{}({}), action:{}, time:{}}}".format(self.model.full_name, self.instance.id, self.action,
-                                                                  self.timestamp)
-
-
+        return "ModelAction{{{}({}), action:{}, time:{}}}".format(
+            self.model.full_name, self.instance.id, self.action, self.timestamp)

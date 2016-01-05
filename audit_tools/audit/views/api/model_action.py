@@ -64,7 +64,8 @@ class ModelActionViewSet(APIViewSet):
 
         return self.queryset
 
-    def _filter_access(self, user_id=None, url=None, view_app=None, view_name=None, interlink_id=None, date_from=None, date_to=None):
+    def _filter_access(self, user_id=None, url=None, view_app=None, view_name=None, interlink_id=None, date_from=None,
+                       date_to=None):
         accesses = Access.objects.all()
         if date_from:
             accesses = accesses.filter(time__request__gte=date_from)

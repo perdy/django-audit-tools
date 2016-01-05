@@ -135,9 +135,9 @@ def _pre_delete(sender, **kwargs):
                 save_model_action.apply_async((model_action, access, process))
 
             logger.info("<%s> Model:%s ID:%s", action.capitalize(), model['full_name'], instance['id'])
-        except Exception as e:
-            logger.error("<%s> Model:%s ID:%s Error:%s", action.capitalize(), model['full_name'], instance['id'])
-    except Exception as e:
+        except Exception:
+            logger.exception("<%s> Model:%s ID:%s Error:%s", action.capitalize(), model['full_name'], instance['id'])
+    except Exception:
         logger.exception("<Pre Delete>")
 
 

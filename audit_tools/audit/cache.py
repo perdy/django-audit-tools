@@ -20,15 +20,12 @@ def get_process(process):
         p = THREAD_NAMESPACE.audit_current_process
     else:
         try:
-            p = Process.objects.get(
-                pid=process['pid'],
-                machine=process['machine'],
-                creation_time=process['creation_time']
-            )
+            p = Process.objects.get(pid=process['pid'], machine=process['machine'],
+                                    creation_time=process['creation_time'])
         except DoesNotExist:
             p = Process(**process)
             p.save()
-            
+
         set_process(p)
 
     return p

@@ -9,8 +9,8 @@ from django.views.generic import TemplateView, View, DetailView
 from django.views.generic.base import TemplateResponseMixin
 
 from demo.models import Test
-from ebury_audit.models import Access, ModelAction
-from ebury_audit.decorators import DisableAudit
+from audit_tools.audit.models import Access, ModelAction
+from audit_tools.audit.decorators import DisableAudit
 
 
 def test_decorator(func):

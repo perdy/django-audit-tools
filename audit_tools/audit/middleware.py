@@ -64,7 +64,8 @@ class AuditMiddleware(object):
 
                 self._blacklisted = self._check_blacklist(request.path, view_data['app'])
 
-                logger.debug("<Process View> View:%s %s", view_data['full_name'], 'BlackList' if self._blacklisted else '')
+                msg = "<Process View> View:%s %s", view_data['full_name'], 'BlackList' if self._blacklisted else ''
+                logger.debug(msg)
 
                 if not self._blacklisted:
                     self._view = view_data

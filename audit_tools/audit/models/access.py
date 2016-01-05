@@ -223,7 +223,7 @@ class Access(Document):
         :rtype: str
         """
         return "Access to view {} from app {} mapped to url {} by user {} ({})".format(
-                self.view.name, self.view.app, self.request.path, self.user.username, self.time.request)
+            self.view.name, self.view.app, self.request.path, self.user.username, self.time.request)
 
     def __str__(self):
         return "Access{{{}, user:{}, url:{}, time:{}}}".format(self.view.full_name, self.user.username,
