@@ -4,7 +4,17 @@ Django Audit Tools
 
 .. image:: https://travis-ci.org/PeRDy/django-audit-tools.svg?branch=master
     :target: https://travis-ci.org/PeRDy/django-audit-tools
-.. image:: https://coveralls.io/repos/PeRDy/django-audit-tools/badge.svg?branch=master&service=github :target: https://coveralls.io/github/PeRDy/django-audit-tools?branch=master
+.. image:: https://coveralls.io/repos/PeRDy/django-audit-tools/badge.svg?branch=master&service=github 
+    :target: https://coveralls.io/github/PeRDy/django-audit-tools?branch=master
+.. image:: https://img.shields.io/pypi/v/django-audit-tools.svg
+    :target: https://pypi.python.org/pypi/django-audit-tools/
+    :alt: Latest Version
+    
+:Version: 0.3.0
+:Status: Development
+:Author: José Antonio Perdiguero López
+
+**Warning:** This package is currently under development, use at your own risk.
 
 Django application that provides a set of tools for auditing requests and models and improve logging.
 
