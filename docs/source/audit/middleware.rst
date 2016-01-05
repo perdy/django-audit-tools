@@ -2,7 +2,7 @@
 Middleware
 ==========
 
-.. automodule:: ebury_audit.middleware
+.. automodule:: audit_tools.audit.middleware
 
 .. autoclass:: AuditMiddleware
 

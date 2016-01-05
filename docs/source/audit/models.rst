@@ -4,7 +4,7 @@ Models
 
 .. image:: ../_images/Models.png
 
-.. automodule:: ebury_audit.models
+.. automodule:: audit_tools.audit.models
 
 .. autoclass:: Access
     :members:

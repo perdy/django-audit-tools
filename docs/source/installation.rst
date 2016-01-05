@@ -2,12 +2,12 @@
 Installation
 ============
 
-To install *Ebury Audit* you need to follow the next steps:
+To install *Audit* you need to follow the next steps:
 
 #. Add MongoDB repository.
 #. Install MongoDB.
 #. Configure authentication for MongoDB.
-#. Install Ebury Audit package.
+#. Install Django Audit Tools package.
 
 Install MongoDB
 ===============
@@ -99,14 +99,14 @@ Create audit user (replace <USER> and <PASSWORD>)::
     export DB_AUDIT_USER=<USER>
     export DB_AUDIT_PASSWORD=<PASSWORD>
 
-Install Ebury Audit
-===================
+Install Audit
+=============
 
-Use pip to install *Ebury Audit* from local file::
+Use pip to install *Audit* from local file::
 
-    pip install ebury-audit.tar.gz
+    pip install django-audit-tools.tar.gz
 
 Or install from pip repository::
 
-    pip install ebury-audit
+    pip install django-audit-tools
 

@@ -2,7 +2,7 @@
 Managers
 ========
 
-.. automodule:: ebury_audit.managers
+.. automodule:: audit_tools.audit.managers
 
 Access
 ======
