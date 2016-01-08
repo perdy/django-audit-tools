@@ -5,7 +5,7 @@ Module with some factory methods for models.
 from __future__ import unicode_literals
 import datetime
 
-from audit_tools.audit.cache import get_process
+from audit_tools.audit.cache import cache
 
 __all__ = ['create_access', 'create_model_action', 'update_access']
 
@@ -20,7 +20,7 @@ def create_model_action(model_action_data, access, process):
 
 
 def create_access(access, process):
-    p = get_process(process)
+    p = cache.get_process(process)
 
     # Store access
     access['process'] = p

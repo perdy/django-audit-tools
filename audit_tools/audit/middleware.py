@@ -8,7 +8,7 @@ import logging
 
 from bson.json_util import loads
 
-from audit_tools.audit.cache import set_last_access
+from audit_tools.audit.cache import cache
 from audit_tools.audit.decorators import CheckActivate
 from audit_tools.audit import settings
 from audit_tools.audit.tasks import save_access
@@ -96,7 +96,7 @@ class AuditMiddleware(object):
 
                     # Save Access
                     self._access = create_access(access, self._process)
-                    set_last_access(self._access)
+                    cache.set_last_access(self._access)
 
                     if not settings.RUN_ASYNC:
                         save_access(self._access)

@@ -136,13 +136,11 @@ class SignalsTestCase(TestCase):
         self.assertEqual(logger.exception.call_count, 1)
 
     @patch('audit_tools.audit.signals.extract_process_data')
-    @patch('audit_tools.audit.signals.get_process')
-    @patch('audit_tools.audit.signals.get_last_access')
+    @patch('audit_tools.audit.signals.cache')
     @patch('audit_tools.audit.signals._extract_content_data')
     @patch('audit_tools.audit.tasks.save_model_action')
     @patch('audit_tools.audit.signals.settings')
-    def test_post_save_sync(self, settings, save_model_action, extract_content_data, get_last_access, get_process,
-                            extract_process_data):
+    def test_post_save_sync(self, settings, save_model_action, extract_content_data, cache, extract_process_data):
         settings.RUN_ASYNC = False
         model = TestModel(
             string_field='Test',
@@ -160,8 +158,8 @@ class SignalsTestCase(TestCase):
         signals._post_save(model, instance=model)
 
         # Check that extract process and access was done successfully
-        self.assertEqual(get_last_access.call_count, 1)
-        self.assertEqual(get_process.call_count, 1)
+        self.assertEqual(cache.get_last_access.call_count, 1)
+        self.assertEqual(cache.get_process.call_count, 1)
         self.assertEqual(extract_process_data.call_count, 1)
 
         # Check that was called synchronously
@@ -169,13 +167,11 @@ class SignalsTestCase(TestCase):
         self.assertEqual(save_model_action.apply_async.call_count, 0)
 
     @patch('audit_tools.audit.signals.extract_process_data')
-    @patch('audit_tools.audit.signals.get_process')
-    @patch('audit_tools.audit.signals.get_last_access')
+    @patch('audit_tools.audit.signals.cache')
     @patch('audit_tools.audit.signals._extract_content_data')
     @patch('audit_tools.audit.tasks.save_model_action')
     @patch('audit_tools.audit.signals.settings')
-    def test_post_save_async(self, settings, save_model_action, extract_content_data, get_last_access, get_process,
-                             extract_process_data):
+    def test_post_save_async(self, settings, save_model_action, extract_content_data, cache, extract_process_data):
         settings.RUN_ASYNC = True
         model = TestModel(
             string_field='Test',
@@ -193,8 +189,8 @@ class SignalsTestCase(TestCase):
         signals._post_save(model, instance=model)
 
         # Check that extract process and access was done successfully
-        self.assertEqual(get_last_access.call_count, 1)
-        self.assertEqual(get_process.call_count, 1)
+        self.assertEqual(cache.get_last_access.call_count, 1)
+        self.assertEqual(cache.get_process.call_count, 1)
         self.assertEqual(extract_process_data.call_count, 1)
 
         # Check that was called asynchronously
@@ -202,13 +198,11 @@ class SignalsTestCase(TestCase):
         self.assertEqual(save_model_action.apply_async.call_count, 1)
 
     @patch('audit_tools.audit.signals.extract_process_data')
-    @patch('audit_tools.audit.signals.get_process')
-    @patch('audit_tools.audit.signals.get_last_access')
+    @patch('audit_tools.audit.signals.cache')
     @patch('audit_tools.audit.signals._extract_content_data')
     @patch('audit_tools.audit.tasks.save_model_action')
     @patch('audit_tools.audit.signals.settings')
-    def test_pre_delete_sync(self, settings, save_model_action, extract_content_data, get_last_access, get_process,
-                             extract_process_data):
+    def test_pre_delete_sync(self, settings, save_model_action, extract_content_data, cache, extract_process_data):
         settings.RUN_ASYNC = False
         model = TestModel(
             string_field='Test',
@@ -227,8 +221,8 @@ class SignalsTestCase(TestCase):
         signals._pre_delete(model, instance=model)
 
         # Check that extract process and access was done successfully
-        self.assertEqual(get_last_access.call_count, 1)
-        self.assertEqual(get_process.call_count, 1)
+        self.assertEqual(cache.get_last_access.call_count, 1)
+        self.assertEqual(cache.get_process.call_count, 1)
         self.assertEqual(extract_process_data.call_count, 1)
 
         # Check that was called synchronously
@@ -236,13 +230,11 @@ class SignalsTestCase(TestCase):
         self.assertEqual(save_model_action.apply_async.call_count, 0)
 
     @patch('audit_tools.audit.signals.extract_process_data')
-    @patch('audit_tools.audit.signals.get_process')
-    @patch('audit_tools.audit.signals.get_last_access')
+    @patch('audit_tools.audit.signals.cache')
     @patch('audit_tools.audit.signals._extract_content_data')
     @patch('audit_tools.audit.tasks.save_model_action')
     @patch('audit_tools.audit.signals.settings')
-    def test_pre_delete_async(self, settings, save_model_action, extract_content_data, get_last_access, get_process,
-                              extract_process_data):
+    def test_pre_delete_async(self, settings, save_model_action, extract_content_data, cache, extract_process_data):
         settings.RUN_ASYNC = True
         model = TestModel(
             string_field='Test',
@@ -261,8 +253,8 @@ class SignalsTestCase(TestCase):
         signals._pre_delete(model, instance=model)
 
         # Check that extract process and access was done successfully
-        self.assertEqual(get_last_access.call_count, 1)
-        self.assertEqual(get_process.call_count, 1)
+        self.assertEqual(cache.get_last_access.call_count, 1)
+        self.assertEqual(cache.get_process.call_count, 1)
         self.assertEqual(extract_process_data.call_count, 1)
 
         # Check that was called asynchronously
