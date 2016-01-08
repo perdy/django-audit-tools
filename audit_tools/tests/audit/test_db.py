@@ -1,12 +1,10 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-from mock import patch, MagicMock, call
-from mongoengine import DoesNotExist, ConnectionError
+from mock import patch, call
+from mongoengine import ConnectionError
 
-from audit_tools.audit.cache import cache
 from audit_tools.audit.db import mongodb_connect
-from audit_tools.audit.models import Process, Access
 
 
 @patch('audit_tools.audit.db.mongoengine')
