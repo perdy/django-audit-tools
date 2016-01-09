@@ -16,6 +16,8 @@ Django Audit Tools
 
 **Warning:** This package is currently under development, use at your own risk.
 
+**Note:** I started the development of this project meanwhile I was working in Ebury_. So I want to show gratitude for release the code to share it with open source community.
+
 Django application that provides a set of tools for auditing requests and models and improve logging.
 
 Full documentation in ReadTheDocs_.
@@ -180,3 +182,4 @@ Default::
     AUDIT_TRANSLATE_URLS = False
 
 .. _ReadTheDocs: http://django-audit-tools.readthedocs.org/
+.. _Ebury: http://www.ebury.com
