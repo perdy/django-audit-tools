@@ -1,7 +1,7 @@
 [run]
 branch = True
 omit =
-    */settings/*
+    *settings*
     *__init__.py
     *urls*
     .tox*

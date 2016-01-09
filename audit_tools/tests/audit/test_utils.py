@@ -1,12 +1,15 @@
 from __future__ import unicode_literals
+
 import datetime
 from decimal import Decimal
 
+from django.db.models.fields.files import FieldFile
 from django.test import TestCase, RequestFactory
-from mock import patch
+from mock import patch, MagicMock
 from psutil import Process
 
 from audit_tools.audit import utils
+from audit_tools.audit.utils import filter_request_meta, i18n_url
 
 
 class DynamicImportTestCase(TestCase):
@@ -71,6 +74,21 @@ class RequestUtilsTestCase(TestCase):
         self.assertEqual(len(request_dict['METADATA']), len(request.META))
         self.assertIsNone(request_dict['RAW_METADATA'])
 
+    def test_request_to_dict_fail(self):
+        effects = ('get', 'post', 'cookies', ValueError)
+        with patch('audit_tools.audit.utils.fix_dict', side_effect=effects):
+            request_factory = RequestFactory()
+            request = request_factory.get('/test', data={'foo': 'bar'})
+
+            request_dict = utils.request_to_dict(request)
+
+            self.assertEqual(request_dict['path'], '/test')
+            self.assertEqual(request_dict['GET'], 'get')
+            self.assertEqual(request_dict['POST'], 'post')
+            self.assertEqual(request_dict['COOKIES'], 'cookies')
+            self.assertIsNone(request_dict['METADATA'])
+            self.assertEqual(len(request_dict['RAW_METADATA']), len(str(filter_request_meta(request.META))))
+
     def tearDown(self):
         pass
 
@@ -106,6 +124,7 @@ class UtilsTestCase(TestCase):
             'decimal': Decimal(1.0),
             'str': b'str',
             'unicode': 'unicode',
+            'file': FieldFile(instance=None, field=MagicMock(), name='foo')
         }
 
         expected_result = {
@@ -114,6 +133,7 @@ class UtilsTestCase(TestCase):
             'decimal': 1.0,
             'str': 'str',
             'unicode': 'unicode',
+            'file': 'foo'
         }
 
         serialized_instance = utils.serialize_model_instance(None)
@@ -157,6 +177,24 @@ class UtilsTestCase(TestCase):
         self.assertEqual(process_data['name'], 'foo')
         self.assertEqual(process_data['args'], 'b a r')
         self.assertIn('creation_time', process_data)
+
+    @patch('audit_tools.audit.utils.settings')
+    def test_i18n_url(self, settings):
+        settings.TRANSLATE_URLS = True
+        url = 'foo'
+
+        res = i18n_url(url)
+
+        self.assertFalse(isinstance(res, str))
+
+    @patch('audit_tools.audit.utils.settings')
+    def test_i18n_url_deactivated(self, settings):
+        settings.TRANSLATE_URLS = False
+        url = 'foo'
+
+        res = i18n_url(url)
+
+        self.assertEqual(url, res)
 
     def tearDown(self):
         pass
