@@ -159,6 +159,32 @@ class MiddlewareTestCase(TestCase):
         self.assertEqual(save_access.call_count, 0)
         self.assertEqual(save_access.apply_async.call_count, 1)
 
+    @patch('audit_tools.audit.middleware.logger')
+    @patch('audit_tools.audit.middleware.create_access')
+    @patch('audit_tools.audit.middleware.save_access')
+    @patch('audit_tools.audit.middleware.settings')
+    def test_process_request_fail(self, settings, save_access, create_access, logger):
+        save_access.side_effect = Exception
+
+        # Add sync setting
+        settings.RUN_ASYNC = False
+
+        request = HttpRequest()
+        view_func = lambda: None
+        view_args = []
+        view_kwargs = {}
+        self.middleware.process_view(request, view_func, view_args, view_kwargs)
+
+        # Check that create access method that make the object in Audit database is called
+        self.assertEqual(create_access.call_count, 1)
+
+        # Check that sync call is done and async call isn't
+        self.assertEqual(save_access.call_count, 1)
+        self.assertEqual(save_access.apply_async.call_count, 0)
+
+        # Check that an exception is logged
+        self.assertEqual(logger.exception.call_count, 1)
+
     def test_response_html(self):
         # Create a html response object
         html_template = "<!DOCTYPE html><html><head><title>Title</title></head><body>Page</body></html>"
@@ -192,6 +218,17 @@ class MiddlewareTestCase(TestCase):
         self.assertIn('xml', response_data['type'])
         self.assertEqual(200, response_data['status_code'])
         self.assertEqual(xml_template, response_data['content'])
+
+    def test_response_fail(self):
+        # Create a json response object
+        json_template = '{"asd]'
+        response = HttpResponse(json_template, content_type='application/json')
+
+        response_data = self.middleware._extract_response_data(response)
+
+        self.assertIn('json', response_data['type'])
+        self.assertEqual(200, response_data['status_code'])
+        self.assertEqual(None, response_data['content'])
 
     @patch('audit_tools.audit.middleware.save_access')
     def test_process_response_disabled(self, save_access):

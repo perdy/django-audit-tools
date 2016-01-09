@@ -312,4 +312,4 @@ def custom_provider(*args, **kwargs):
 
     :return: {}
     """
-    return {}
+    return {}  # pragma: no cover
