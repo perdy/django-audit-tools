@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from rest_framework_mongoengine.viewsets import ReadOnlyModelViewSet
-from audit_tools.audit.permissions import APIAccess
+from audit_tools.audit.permissions import ApiAccess
 
 from audit_tools.audit.views.api.mixins import AjaxFormMixin
 from audit_tools.audit.models.serializers import CurrentPageSerializer
@@ -11,7 +11,7 @@ class APIViewSet(AjaxFormMixin, ReadOnlyModelViewSet):
     """Base viewset for API views.
     """
     pagination_serializer_class = CurrentPageSerializer
-    permission_classes = (APIAccess, )
+    permission_classes = (ApiAccess,)
 
     def get_queryset(self):
         if not self.queryset:
