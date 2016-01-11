@@ -106,6 +106,17 @@ class SignalsTestCase(TestCase):
         self.assertEqual(instance_data['id'], '1')
         self.assertEqual(instance_data['description'], '')
 
+    def test_instance_data_wrong(self):
+        model = TestModel()
+        model.id = u'foo'
+        model.description = 'bar'
+
+        with patch('audit_tools.audit.signals.unicode', side_effect=ValueError):
+            instance_data = signals._extract_instance_data(model)
+
+        self.assertEqual(instance_data['id'], '')
+        self.assertEqual(instance_data['description'], '')
+
     def test_pre_save_new(self):
         model = TestModel(
             string_field='Test',
