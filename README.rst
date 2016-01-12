@@ -9,6 +9,9 @@ Django Audit Tools
 .. image:: https://img.shields.io/pypi/v/django-audit-tools.svg
     :target: https://pypi.python.org/pypi/django-audit-tools/
     :alt: Latest Version
+.. image:: https://landscape.io/github/PeRDy/django-audit-tools/master/landscape.svg?style=flat
+    :target: https://landscape.io/github/PeRDy/django-audit-tools/master
+    :alt: Code Health
     
 :Version: 0.3.0
 :Status: Development
