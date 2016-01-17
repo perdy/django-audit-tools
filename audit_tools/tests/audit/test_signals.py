@@ -2,8 +2,8 @@
 
 from __future__ import unicode_literals
 
-from django.test import TestCase
 from django.db import models
+from django.test import TestCase
 from mock import patch, MagicMock
 
 from audit_tools.audit import signals

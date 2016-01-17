@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
+from rest_framework import serializers, pagination
 from rest_framework.response import Response
 from rest_framework_mongoengine.serializers import DocumentSerializer
-from rest_framework import serializers, pagination
 
 from audit_tools.audit.models import Process, Access, ModelAction
 

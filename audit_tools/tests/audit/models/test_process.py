@@ -3,10 +3,7 @@ from __future__ import unicode_literals
 import datetime
 from unittest import TestCase
 
-from mock import patch, MagicMock
-
-from audit_tools.audit.models import ACTIONS, Process
-from audit_tools.audit.models.model_action import ModelActionContent, ModelActionModel, ModelActionInstance, ModelAction
+from audit_tools.audit.models import Process
 
 
 class Foo(object):

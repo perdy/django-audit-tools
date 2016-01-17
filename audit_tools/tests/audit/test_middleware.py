@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
+
 from bson.json_util import dumps
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponse
-
 from django.test import TestCase
 from mock import patch
 

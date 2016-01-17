@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from unittest import TestCase
 
-import re
 from mock import patch, call
 
 from audit_tools.audit.managers import _check_args, ModelActionQuerySet, AccessQuerySet

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
-from mock import patch, MagicMock, PropertyMock
+from mock import patch, MagicMock
 
 from audit_tools.audit.permissions import AUDIT_PERMISSIONS, register_permissions, unregister_permissions, SearchAccess, \
     ApiAccess

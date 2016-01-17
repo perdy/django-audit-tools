@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
+import datetime
 from unittest import TestCase
 
-import datetime
 from django.contrib.auth.models import User
 from mock import patch, MagicMock
 
