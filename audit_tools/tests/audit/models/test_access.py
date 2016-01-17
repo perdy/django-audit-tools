@@ -209,8 +209,6 @@ class AccessTestCase(TestCase):
                 process=None,
         )
 
-        print(access.items())
-
         items_mock = MagicMock()
         items_mock.items.return_value = items
         with patch.object(Access, 'to_mongo', return_value=items_mock) as mongo_mock:
@@ -235,7 +233,6 @@ class AccessTestCase(TestCase):
 
         expected = 'Access to view {} from app {} mapped to url {} by user {} ({})'.format(
                 self.view_name, self.view_app, self.url, self.user_username, self.time_request)
-        print(self.access_request.path)
         self.assertEqual(expected, access.verbose_str())
 
     def test_str(self):
@@ -272,18 +269,14 @@ class AccessTimeTestCase(TestCase):
         pass
 
     def test_items(self):
-        items = [('foo', 'bar')]
+        time_request = datetime.datetime(2016, 1, 15, 23, 24, 0)
+        items = [('request', time_request)]
 
-        access_time = AccessTime(request=datetime.datetime(2016, 1, 15, 23, 24, 0))
+        access_time = AccessTime(request=time_request, response=None)
 
-        items_mock = MagicMock()
-        items_mock.items.return_value = items
-        with patch.object(AccessTime, 'to_mongo', return_value=items_mock) as mongo_mock:
-            result = access_time.items()
+        result = access_time.items()
 
-            self.assertEqual(items, result)
-            self.assertEqual(mongo_mock.call_count, 1)
-            self.assertEqual(items_mock.items.call_count, 1)
+        self.assertEqual(items, result)
 
     def tearDown(self):
         pass
