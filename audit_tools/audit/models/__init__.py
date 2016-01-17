@@ -1,8 +1,8 @@
 """Ebury Audit models"""
 
+from audit_tools.audit.models.process import *
 from audit_tools.audit.models.access import *
 from audit_tools.audit.models.model_action import *
-from audit_tools.audit.models.process import *
 
 # Add compatibility with Generic Views
 Process._meta.app_label = 'audit'
