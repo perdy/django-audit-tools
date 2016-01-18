@@ -22,6 +22,16 @@ class AccessViewSet(APIViewSet):
     order_by = '-time__request'
 
     def _filter_date(self, date_from=None, date_to=None):
+        """
+        Filter QuerySet using a range of dates.
+
+        :param date_from: If given, a filter excluding previous data will be done.
+        :type date_from: :class:`datetime.datetime`
+        :param date_to: If given, a filter excluding next data will be done.
+        :type date_to: :class:`datetime.datetime`
+        :return: QuerySet filtered.
+        :rtype: Mongoengine QuerySet.
+        """
         if date_from:
             self.queryset = self.queryset.filter(
                 time__request__gte=date_from,
@@ -71,16 +81,12 @@ class AccessViewSet(APIViewSet):
 
         return self.queryset
 
-    def _filter_process(self, interlink_id=None):
+    def _filter_by_processes(self, interlink_id=None):
         processes = Process.objects.all()
         if interlink_id:
             processes = processes.filter(interlink_id=interlink_id)
 
-        return processes
-
-    def _filter_by_processes(self, processes):
-        if processes is not None:
-            self.queryset = self.queryset.filter(process__in=processes)
+        self.queryset = self.queryset.filter(process__in=processes)
 
         return self.queryset
 
@@ -109,5 +115,4 @@ class AccessViewSet(APIViewSet):
 
         # Filter by interlink process
         interlink_process = filter_form.cleaned_data.get('interlink_process', None)
-        processes = self._filter_process(interlink_process)
-        self._filter_by_processes(processes)
+        self._filter_by_processes(interlink_process)
