@@ -52,20 +52,17 @@ class ModelActionViewSet(APIViewSet):
 
         return self.queryset
 
-    def _filter_by_accesses(self, accesses):
-        if accesses is not None:
-            self.queryset = self.queryset.filter(access__in=accesses)
+    def _filter_by_processes(self, interlink_id=None):
+        processes = Process.objects.all()
+        if interlink_id:
+            processes = processes.filter(interlink_id=interlink_id)
+
+        self.queryset = self.queryset.filter(process__in=processes)
 
         return self.queryset
 
-    def _filter_by_processes(self, processes):
-        if processes is not None:
-            self.queryset = self.queryset.filter(process__in=processes)
-
-        return self.queryset
-
-    def _filter_access(self, user_id=None, url=None, view_app=None, view_name=None, interlink_id=None, date_from=None,
-                       date_to=None):
+    def _filter_by_accesses(self, user_id=None, url=None, view_app=None, view_name=None, interlink_id=None,
+                            date_from=None, date_to=None):
         accesses = Access.objects.all()
         if date_from:
             accesses = accesses.filter(time__request__gte=date_from)
@@ -80,22 +77,17 @@ class ModelActionViewSet(APIViewSet):
             accesses = accesses.filter(request__path__icontains=url)
 
         if view_app:
-            accesses = accesses.filter(view_app=view_app)
+            accesses = accesses.filter(view__app=view_app)
 
         if view_name:
-            accesses = accesses.filter(view_name=view_name)
+            accesses = accesses.filter(view__name=view_name)
 
         if interlink_id:
             accesses = accesses.filter(interlink_id=interlink_id)
 
-        return accesses
+        self.queryset = self.queryset.filter(access__in=accesses)
 
-    def _filter_process(self, interlink_id=None):
-        processes = Process.objects.all()
-        if interlink_id:
-            processes = processes.filter(interlink_id=interlink_id)
-
-        return processes
+        return self.queryset
 
     def filter_query(self, filter_form):
         # Filter by date range
@@ -118,10 +110,8 @@ class ModelActionViewSet(APIViewSet):
         view_name = filter_form.cleaned_data.get('method_name', None)
         # Filter by interlink access
         interlink_access = filter_form.cleaned_data.get('interlink_access', None)
-        accesses = self._filter_access(user_id, url, view_app, view_name, interlink_access, date_from, date_to)
-        self._filter_by_accesses(accesses)
+        self._filter_by_accesses(user_id, url, view_app, view_name, interlink_access, date_from, date_to)
 
         # Filter by interlink process
         interlink_process = filter_form.cleaned_data.get('interlink_process', None)
-        processes = self._filter_process(interlink_process)
-        self._filter_by_processes(processes)
+        self._filter_by_processes(interlink_process)

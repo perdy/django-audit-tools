@@ -13,7 +13,6 @@ from audit_tools.audit.views import AccessViewSet
 class AccessViewSetTestCase(TestCase):
     def setUp(self):
         self.access = AccessViewSet()
-        pass
 
     def test_filter_date_without_from_neither_to(self, queryset_mock):
         self.access._filter_date()
