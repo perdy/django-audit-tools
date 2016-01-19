@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import datetime
 from unittest import TestCase
 
-from mock import MagicMock, call, patch
+from mock import MagicMock, patch
 
 from audit_tools.audit.views.api.base import ApiViewSet
 
