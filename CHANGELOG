@@ -1,5 +1,11 @@
 Changes
 =======
+0.4.0 - 18/01/2015
+ * Create tests for all modules.
+ * Raise test coverage to near 100%.
+ * Add integration with prospector using tox.
+ * Add integration with Landscape.
+
 0.3.0 - 05/01/2015
  * Use nose as testing framework.
  * Update requirements and create requirements for testing.
