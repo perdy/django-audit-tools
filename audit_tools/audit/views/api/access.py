@@ -3,12 +3,12 @@ from __future__ import unicode_literals
 from audit_tools.audit.forms.api import AccessFilterForm
 from audit_tools.audit.models import Access, Process
 from audit_tools.audit.models.serializers import AccessSerializer
-from audit_tools.audit.views.api.base import APIViewSet
+from audit_tools.audit.views.api.base import ApiViewSet
 
 __all__ = ['AccessViewSet']
 
 
-class AccessViewSet(APIViewSet):
+class AccessViewSet(ApiViewSet):
     form_class = {
         'GET': AccessFilterForm,
         'POST': None,
@@ -30,7 +30,7 @@ class AccessViewSet(APIViewSet):
         :param date_to: If given, a filter excluding next data will be done.
         :type date_to: :class:`datetime.datetime`
         :return: QuerySet filtered.
-        :rtype: Mongoengine QuerySet.
+        :rtype: :class:`mongoengine.QuerySet`
         """
         if date_from:
             self.queryset = self.queryset.filter(
@@ -45,6 +45,14 @@ class AccessViewSet(APIViewSet):
         return self.queryset
 
     def _filter_user(self, user_id=None):
+        """
+        Filter a QuerySet using user data.
+
+        :param user_id: If give, a filter for user id match will be done.
+        :type user_id: int
+        :return: QuerySet filtered.
+        :rtype: :class:`mongoengine.QuerySet`
+        """
         if user_id:
             self.queryset = self.queryset.filter(
                 user__id=user_id,
@@ -53,6 +61,14 @@ class AccessViewSet(APIViewSet):
         return self.queryset
 
     def _filter_url(self, url=None):
+        """
+        Filter a QuerySet using url.
+
+        :param url: If given, a filter for url contained will be done.
+        :type url: str
+        :return: QuerySet filtered.
+        :rtype: :class:`mongoengine.QuerySet`
+        """
         if url:
             self.queryset = self.queryset.filter(
                 request__path__icontains=url,
@@ -61,6 +77,16 @@ class AccessViewSet(APIViewSet):
         return self.queryset
 
     def _filter_view(self, view_app=None, view_name=None):
+        """
+        Filter a QuerySet using view data.
+
+        :param view_app: If given, a filter for view app match will be done.
+        :type view_app: str
+        :param view_name: If given, a filter for view name match will be done.
+        :type view_name: str
+        :return: QuerySet filtered.
+        :rtype: :class:`mongoengine.QuerySet`
+        """
         if view_app:
             self.queryset = self.queryset.filter(
                 view__app=view_app,
@@ -74,6 +100,14 @@ class AccessViewSet(APIViewSet):
         return self.queryset
 
     def _filter_interlink(self, interlink_id=None):
+        """
+        Filter a QuerySet using interlink id.
+
+        :param interlink_id: If given, a filter for interlink id match will be done.
+        :type interlink_id: str
+        :return: QuerySet filtered.
+        :rtype: :class:`mongoengine.QuerySet`
+        """
         if interlink_id:
             self.queryset = self.queryset.filter(
                 interlink_id=interlink_id,
@@ -82,6 +116,14 @@ class AccessViewSet(APIViewSet):
         return self.queryset
 
     def _filter_by_processes(self, interlink_id=None):
+        """
+        Filter a QuerySet using processes whose interlink id matches.
+
+        :param interlink_id: If given, a filter for processes whose interlink id match will be done.
+        :type interlink_id: str
+        :return: QuerySet filtered.
+        :rtype: :class:`mongoengine.QuerySet`
+        """
         processes = Process.objects.all()
         if interlink_id:
             processes = processes.filter(interlink_id=interlink_id)
@@ -91,6 +133,11 @@ class AccessViewSet(APIViewSet):
         return self.queryset
 
     def filter_query(self, filter_form):
+        """
+        Filter a QuerySet using a filter form.
+
+        :param filter_form: Form with data to filter QuerySet.
+        """
         # Filter by date range
         date_from = filter_form.cleaned_data.get('date_from', None)
         date_to = filter_form.cleaned_data.get('date_to', None)

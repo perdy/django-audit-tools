@@ -2,12 +2,12 @@ from __future__ import unicode_literals
 
 from audit_tools.audit.models import Process
 from audit_tools.audit.models.serializers import ProcessSerializer
-from audit_tools.audit.views.api.base import APIViewSet
+from audit_tools.audit.views.api.base import ApiViewSet
 
 __all__ = ['ProcessViewSet']
 
 
-class ProcessViewSet(APIViewSet):
+class ProcessViewSet(ApiViewSet):
     form_class = {
         'GET': None,
         'POST': None,

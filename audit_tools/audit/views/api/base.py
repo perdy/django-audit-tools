@@ -7,13 +7,19 @@ from audit_tools.audit.views.api.mixins import AjaxFormMixin
 from audit_tools.audit.models.serializers import CurrentPageSerializer
 
 
-class APIViewSet(AjaxFormMixin, ReadOnlyModelViewSet):
+class ApiViewSet(AjaxFormMixin, ReadOnlyModelViewSet):
     """Base viewset for API views.
     """
     pagination_serializer_class = CurrentPageSerializer
     permission_classes = (ApiAccess,)
 
     def get_queryset(self):
+        """
+        Create and returns QuerySet. If a form is defined will be used to filter the QuerySet.
+
+        :return: Queryset.
+        :rtype: :class:`mongoengine.QuerySet`
+        """
         if not self.queryset:
             self.queryset = self.model.objects.all()
 
