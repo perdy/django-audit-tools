@@ -5,13 +5,13 @@ import re
 from mongoengine import QuerySet
 
 
-def _check_args(required_arg, incompatible_args, kwargs, cmp_func=lambda x, y: x.startswith(y)):
+def _check_args(required, incompatible, kwargs, cmp_func=lambda x, y: x.startswith(y)):
     """Check for correct arguments.
 
-    :param required_arg: required keyword argument.
-    :type required_arg: unicode
-    :param incompatible_args: tuple of incompatible args.
-    :type incompatible_args: tuple(unicode)
+    :param required: required keyword argument.
+    :type required: unicode
+    :param incompatible: tuple of incompatible args.
+    :type incompatible: tuple(unicode)
     :param kwargs: kwargs
     :type kwargs: dict
     :param cmp_func: function that returns true if a key is valid.
@@ -20,14 +20,14 @@ def _check_args(required_arg, incompatible_args, kwargs, cmp_func=lambda x, y: x
     """
     # Required arguments
     try:
-        key, value = [(k, v) for k, v in kwargs.iteritems() if cmp_func(k, required_arg)][0]
+        key, value = [(k, v) for k, v in kwargs.iteritems() if cmp_func(k, required)][0]
     except IndexError:
-        raise AttributeError('Argument {} without modifiers required.'.format(required_arg))
+        raise AttributeError('Argument {} without modifiers required.'.format(required))
 
     # Incompatible arguments
-    if len([x for x in kwargs.keys() if x in incompatible_args]) > 0:
+    if len([x for x in kwargs.keys() if x in incompatible]) > 0:
         raise AttributeError('You cannot call this function with {}. Use only fview argument for that.'.format(
-            ', '.join(incompatible_args)))
+            ', '.join(incompatible)))
 
     return key, value
 
@@ -60,6 +60,7 @@ class ModelActionQuerySet(QuerySet):
         """
         kwargs = self._prepare_kwargs_by_model(kwargs)
 
+        print(self.filter)
         return self.filter(*args, **kwargs)
 
     def get_by_model(self, *args, **kwargs):

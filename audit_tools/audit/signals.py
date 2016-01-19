@@ -5,7 +5,7 @@ import logging
 
 from django.db.models.signals import pre_save, post_save, pre_delete
 
-from audit_tools.audit.cache import get_process, get_last_access
+from audit_tools.audit.cache import cache
 from audit_tools.audit.decorators import CheckActivate
 from audit_tools.audit import settings
 from audit_tools.audit.utils import extract_process_data, dynamic_import, serialize_model_instance
@@ -76,8 +76,8 @@ def _post_save(sender, **kwargs):
 
         try:
             # Get process
-            process = get_process(process)
-            access = get_last_access()
+            process = cache.get_process(process)
+            access = cache.get_last_access()
 
             if not settings.RUN_ASYNC:
                 save_model_action(model_action, access, process)
@@ -126,8 +126,8 @@ def _pre_delete(sender, **kwargs):
 
         try:
             # Get process
-            process = get_process(process)
-            access = get_last_access()
+            process = cache.get_process(process)
+            access = cache.get_last_access()
 
             if not settings.RUN_ASYNC:
                 save_model_action(model_action, access, process)

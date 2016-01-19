@@ -1,0 +1,29 @@
+doc-warnings: yes
+
+test-warnings: no
+
+strictness: medium
+
+max-line-length: 120
+
+uses:
+    - django
+    - celery
+
+autodetect: yes
+
+requirements:
+    - requirements.txt
+    - requirements-test.txt
+
+ignore-paths:
+    - docs
+
+ignore-patterns:
+    - ^demo/doc_.*\.py$
+    - .*settings.*
+    - (^|/)docs(/|$)
+    - (^|/)vendor(/|$)
+
+python-targets:
+    - 2

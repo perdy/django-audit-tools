@@ -8,41 +8,72 @@ import threading
 
 from mongoengine import DoesNotExist
 
-__all__ = ['THREAD_NAMESPACE', 'get_process', 'set_process', 'get_last_access', 'set_last_access']
+__all__ = ['cache']
 
 THREAD_NAMESPACE = threading.local()
 
 
-def get_process(process):
-    from audit_tools.audit.models import Process
+class Cache(object):
+    """
+    Cache object to hold audit object through thread memory space.
+    """
+    def __init__(self):
+        """
+        Create Cache object and get thread namespace.
+        """
+        self.namespace = THREAD_NAMESPACE
 
-    if hasattr(THREAD_NAMESPACE, "audit_current_process"):
-        p = THREAD_NAMESPACE.audit_current_process
-    else:
-        try:
-            p = Process.objects.get(pid=process['pid'], machine=process['machine'],
-                                    creation_time=process['creation_time'])
-        except DoesNotExist:
-            p = Process(**process)
-            p.save()
+    def get_process(self, process):
+        """
+        Get current process. If not exists, create it.
 
-        set_process(p)
+        :param process: Process data.
+        :type process: dict.
+        :return: Process
+        :rtype: :class:`audit_tools.audit.Process`
+        """
+        from audit_tools.audit.models import Process
 
-    return p
+        p = getattr(self.namespace, "audit_current_process", None)
+        if p is None:
+            try:
+                p = Process.objects.get(pid=process['pid'], machine=process['machine'],
+                                        creation_time=process['creation_time'])
+            except DoesNotExist:
+                p = Process(**process)
+                p.save()
 
+            self.set_process(p)
 
-def set_process(process):
-    THREAD_NAMESPACE.audit_current_process = process
+        return p
 
+    def set_process(self, process):
+        """
+        Set current process.
 
-def get_last_access():
-    if hasattr(THREAD_NAMESPACE, "audit_current_access"):
-        a = THREAD_NAMESPACE.audit_current_access
-    else:
-        a = None
+        :param process: Process object:
+        :type process: :class:`audit_tools.audit.Process`
+        """
+        self.namespace.audit_current_process = process
 
-    return a
+    def get_last_access(self):
+        """
+        Get last access. If there is not access, none will be returned.
 
+        :return: Last access or None if there is not access.
+        :rtype: :class:`audit_tools.audit.Access`
+        """
+        a = getattr(self.namespace, "audit_current_access", None)
 
-def set_last_access(access):
-    THREAD_NAMESPACE.audit_current_access = access
+        return a
+
+    def set_last_access(self, access):
+        """
+        Set last access.
+
+        :param access: Access object.
+        :type access: :class:`audit_tools.audit.Access`
+        """
+        self.namespace.audit_current_access = access
+
+cache = Cache()

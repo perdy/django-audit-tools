@@ -5,6 +5,7 @@ Module to define and create connections with MongoDB.
 from __future__ import unicode_literals
 import logging
 
+from mongoengine import ConnectionError
 import mongoengine
 
 
@@ -34,6 +35,6 @@ def mongodb_connect(connection, alias):
 
     try:
         mongoengine.connect(name, host=uri, alias=alias)
-    except mongoengine.ConnectionError as e:
+    except ConnectionError as e:
         logger.error('Database connection error: %s', e.message, exc_info=e)
         raise e

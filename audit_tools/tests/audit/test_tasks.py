@@ -60,7 +60,7 @@ class ModelActionTaskTestCase(TestCase):
         create_model_action.return_value = model_action
         access = MagicMock()
         access.save.return_value = True
-        access_klass.objects.get.side_effect = ValidationError
+        access_klass.objects.get.side_effect = (ValidationError, access)
 
         result = tasks.save_model_action(model_action, access, None)
 
@@ -75,6 +75,17 @@ class ModelActionTaskTestCase(TestCase):
         result = tasks.save_model_action(model_action, None, None)
 
         self.assertEqual(model_action.save.call_count, 1)
+        self.assertTrue(result)
+
+    def test_save_fail(self, logger, access_klass, create_model_action):
+        model_action = MagicMock()
+        access = MagicMock()
+        access.id = 1
+        access_klass.objects.get.side_effect = Exception
+
+        result = tasks.save_model_action(model_action, access, None)
+
+        self.assertEqual(logger.exception.call_count, 1)
         self.assertTrue(result)
 
     def tearDown(self):

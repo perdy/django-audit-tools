@@ -1,7 +1,7 @@
 [run]
 branch = True
 omit =
-    */settings/*
+    *settings*
     *__init__.py
     *urls*
     .tox*
@@ -16,6 +16,9 @@ omit =
 
 [report]
 exclude_lines =
+    # Pragma
+    pragma: no cover
+
     # Don't complain if tests don't hit defensive assertion code:
     raise AssertionError
     raise NotImplementedError

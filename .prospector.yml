@@ -1,0 +1,50 @@
+inherits:
+    - .landscape.yml
+
+output-format: grouped
+
+dodgy:
+    # Looks at Python code to search for things which look "dodgy"
+    # such as passwords or git conflict artifacts
+    run: true
+
+mccabe:
+    # complexity checking.
+    run: true
+
+pep257:
+    # docstring checking
+    run: true
+
+pep8:
+    # style checking
+    run: true
+    options:
+        max-line-length: 120
+
+pylint:
+    # static analysis and then some
+    run: true
+    options:
+        max-line-length: 120
+        # allow 'logger' as global constant
+        const-rgx: "(([A-Z_][A-Z0-9_]*)|(__.*__)|loggger)$"
+        const-hint: "(([A-Z_][A-Z0-9_]*)|(__.*__)|logger)$"
+    disable:
+        # Too many lines in module
+        - C0302
+        # Used * or ** magic
+        - W0142
+        # Used builtin function 'filter'.
+        # (For maintainability, one should prefer list comprehension.)
+        - W0141
+pyflakes:
+    run: true
+
+pyroma:
+    # checks setup.py
+    run: true
+
+vulture:
+    # this tool does a good job of finding unused code.
+    run: true

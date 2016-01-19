@@ -85,7 +85,7 @@ class AjaxFormMixin(object):
         kwargs['status'] = 400
 
         context = {
-            'sucess': False,
+            'success': False,
             'general_message': msg,
             'status': 400
         }
@@ -96,7 +96,7 @@ class AjaxFormMixin(object):
         )
 
     def filter_query(self, filter_form):
-        pass
+        raise NotImplementedError
 
     def order_query(self):
         self.queryset = self.queryset.order_by(self.order_by)

@@ -24,38 +24,27 @@ def register_permissions():
     Method to register permissions in database
     """
     try:
-        try:
-            model_action_content_type = ContentType.objects.get(
-                app_label='audit',
-                name='audit',
-                model='audit'
-            )
+        content_type, ct_created = ContentType.objects.get_or_create(
+            app_label='audit',
+            name='audit',
+            model='audit'
+        )
+        if not ct_created:
             logger.warn('Content type registered yet: audit')
-        except ContentType.DoesNotExist:
-            model_action_content_type = ContentType.objects.create(
-                app_label='audit',
-                name='audit',
-                model='audit'
-            )
 
         for permission_code, permission_name in AUDIT_PERMISSIONS:
-            try:
-                Permission.objects.get(
-                    content_type=model_action_content_type,
-                    codename=permission_code,
-                    name=permission_name
-                )
+            permission, permission_created = Permission.objects.get_or_create(
+                content_type=content_type,
+                codename=permission_code,
+                name=permission_name
+            )
+            if not permission_created:
                 logger.warn('Permission registered yet: {}'.format(permission_code))
-            except Permission.DoesNotExist:
-                permission = Permission(
-                    content_type=model_action_content_type,
-                    codename=permission_code,
-                    name=permission_name
-                )
-                permission.save()
     except Exception:
         logger.exception("Error registering permissions")
         return False
+
+    logger.info("Audit registered properly")
 
     return True
 
@@ -72,6 +61,7 @@ def unregister_permissions():
         logger.exception("Audit isn't registered")
         return False
 
+    logger.info("Audit unregistered properly")
     return True
 
 
@@ -88,7 +78,7 @@ class SearchAccess(permissions.BasePermission):
         return False
 
 
-class APIAccess(permissions.BasePermission):
+class ApiAccess(permissions.BasePermission):
     """
     Global permission check for API accesses.
     """
